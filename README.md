@@ -37,6 +37,9 @@
 
 - [ 거래 - 결제 ]
   - 결제
+
+결제 과정
+    ![image](assets/payment_flowchart.png)
 ```markdown
 - Access Token을 사용하여 카드사에 결제를 요청하는 API 호출
 ```
@@ -60,4 +63,4 @@
 - 결제 데이터 수집
 
 ## ERD
-![image](https://private-user-images.githubusercontent.com/167763898/341130388-200aab29-5d8e-4153-971b-e7eda347dea5.png?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3MTg4NjE2NjksIm5iZiI6MTcxODg2MTM2OSwicGF0aCI6Ii8xNjc3NjM4OTgvMzQxMTMwMzg4LTIwMGFhYjI5LTVkOGUtNDE1My05NzFiLWU3ZWRhMzQ3ZGVhNS5wbmc_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjQwNjIwJTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI0MDYyMFQwNTI5MjlaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT0zYzUxOWNmNzQwMjU4MTRkNjgyYzk5ZjI0ZDAxMzFkMTNhNjFlZTU2N2YzMDkyNmUzOWEyZDYyZGQ5ZDgyNzM2JlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCZhY3Rvcl9pZD0wJmtleV9pZD0wJnJlcG9faWQ9MCJ9.fWFQsgmVGB1L266NKXahjwaGjCYRLmTz9Kbw4-GAIYw)
+![image](assets/erd.png)
