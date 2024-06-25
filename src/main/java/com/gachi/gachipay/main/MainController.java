@@ -10,6 +10,7 @@ public class MainController {
 
     @RequestMapping("/")
     public String index() {
+        System.out.println("TEST입니다.");
         return "index";
     }
 
