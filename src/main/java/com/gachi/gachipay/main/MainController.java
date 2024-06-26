@@ -10,7 +10,7 @@ public class MainController {
 
     @RequestMapping("/")
     public String index() {
-        System.out.println("PR 테스트4 입니다.");
+        System.out.println("pr-test-one 입니다.");
         return "index";
     }
 
