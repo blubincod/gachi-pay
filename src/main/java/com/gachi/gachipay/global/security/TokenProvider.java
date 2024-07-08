@@ -19,7 +19,8 @@ import java.util.Date;
 @RequiredArgsConstructor
 public class TokenProvider {
 
-    private static final long TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 2; // 2시간
+    private static final long TOKEN_EXPIRE_TIME = 1000 * 60; // 1분
+//    private static final long TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 2; // 2시간
 
     private final MemberService memberService;
 
@@ -71,7 +72,6 @@ public class TokenProvider {
      */
     public boolean validateToken(String token) {
         if (!StringUtils.hasText(token)) return false;
-
         var claims = this.parseClaims(token);
         return !claims.getExpiration().before(new Date()); //만료시간이 현재시간 보다 전인지 검사
     }
