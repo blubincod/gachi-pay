@@ -1,6 +1,6 @@
 package com.gachi.gachipay.member.controller;
 
-import com.gachi.gachipay.global.security.TokenProvider;
+import com.gachi.gachipay.common.security.TokenProvider;
 import com.gachi.gachipay.member.model.Auth;
 import com.gachi.gachipay.member.service.MemberService;
 import lombok.RequiredArgsConstructor;

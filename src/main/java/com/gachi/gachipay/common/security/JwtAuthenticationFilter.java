@@ -1,4 +1,4 @@
-package com.gachi.gachipay.global.security;
+package com.gachi.gachipay.common.security;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

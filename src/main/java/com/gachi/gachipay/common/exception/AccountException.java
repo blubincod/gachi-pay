@@ -1,4 +1,4 @@
-package com.gachi.gachipay.global.exception;
+package com.gachi.gachipay.common.exception;
 
 import lombok.*;
 
@@ -10,4 +10,7 @@ import lombok.*;
 public class AccountException extends RuntimeException {
     ErrorCode errorCode;
     String errorMessage;
+
+    public AccountException(ErrorCode errorCode) {
+    }
 }

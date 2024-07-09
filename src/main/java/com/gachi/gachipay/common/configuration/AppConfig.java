@@ -1,4 +1,4 @@
-package com.gachi.gachipay.global.configuration;
+package com.gachi.gachipay.common.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

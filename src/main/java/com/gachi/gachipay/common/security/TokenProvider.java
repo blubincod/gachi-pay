@@ -1,4 +1,4 @@
-package com.gachi.gachipay.global.security;
+package com.gachi.gachipay.common.security;
 
 import com.gachi.gachipay.member.service.MemberService;
 import io.jsonwebtoken.Claims;
@@ -19,8 +19,8 @@ import java.util.Date;
 @RequiredArgsConstructor
 public class TokenProvider {
 
-    private static final long TOKEN_EXPIRE_TIME = 1000 * 60; // 1분
-//    private static final long TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 2; // 2시간
+//    private static final long TOKEN_EXPIRE_TIME = 1000 * 60; // 1분
+    private static final long TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 2; // 2시간
 
     private final MemberService memberService;
 
