@@ -1,6 +1,7 @@
 package com.gachi.gachipay.account.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,12 +22,18 @@ public class Account {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id; //아이디
 
+    @NotNull
+    private Long userId; //계좌 소유자 아이디
+
+    @NotNull
     private String accountNumber; //계좌번호
 
+    @NotNull
     private Long balance; //잔고
 
     private int status; //계좌 상태
 
+    @NotNull
     private LocalDateTime registeredAt; //계좌 등록 일시
     private LocalDateTime unregisteredAt; //계좌 해지 일시
 

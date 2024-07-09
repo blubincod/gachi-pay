@@ -1,5 +1,6 @@
 package com.gachi.gachipay.account.controller;
 
+import com.gachi.gachipay.account.entity.Account;
 import com.gachi.gachipay.account.model.AccountDto;
 import com.gachi.gachipay.account.repository.AccountRepository;
 import com.gachi.gachipay.account.service.AccountService;
@@ -7,10 +8,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
@@ -19,36 +17,56 @@ public class AccountController {
     private final AccountService accountService;
     private final AccountRepository accountRepository;
 
-    @GetMapping("/account/test")
-    public ResponseEntity<?> testAccount() {
-        accountService.testAccount();
-
-        return ResponseEntity.ok(null);
-    }
-
     /**
-     * 계좌 등록
-     * @param account
+     * 계좌 정보 등록
+     *
+     * @param userId
+     * @param accountDto
      * @return
      */
     @PostMapping("/account")
     public ResponseEntity<?> registerAccount(
-            @RequestBody @Valid AccountDto account
+            @RequestParam("user_id") Long userId,
+            @RequestBody @Valid AccountDto accountDto
     ) {
-        System.out.println("REGISTERING...");
-
-        var result = accountService.registerAccount(account);
+        System.out.println("Registration is in progress...");
+        Account result = accountService.registerAccount(userId, accountDto);
 
         return ResponseEntity.ok(result);
     }
 
     /**
      * 계좌 정보 조회
+     *
      * @return
      */
-    @GetMapping("/account/{id}")
-    public ResponseEntity<?> getAccount() {
-        System.out.println("GET ACCOUNT:)");
+    @GetMapping("/account")
+    public ResponseEntity<?> getAccount(
+            @RequestParam("user_id") Long userId
+    ) {
+        System.out.println("GET ACCOUNT:)" + userId);
+
+        return ResponseEntity.ok(null);
+    }
+
+    /**
+     * 계좌 삭제
+     *
+     * @return
+     */
+    @DeleteMapping("/account/{id}")
+    public ResponseEntity<?> deleteAccount() {
+//        accountService.deleteAccount();
+        return ResponseEntity.ok(null);
+    }
+
+    /**
+     * 계좌 정보 수정
+     *
+     * @return
+     */
+    @PutMapping("/account/{id}")
+    public ResponseEntity<?> modifyAccount() {
 
         return ResponseEntity.ok(null);
     }

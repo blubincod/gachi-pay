@@ -16,5 +16,5 @@ public interface AccountRepository extends JpaRepository<Account,Long > {
     /**
      * 계좌 정보 가져오기
      */
-    Optional<Account> findByAccountNumber(String accountNumber);
+    Optional<Account> findFirstByOrderByIdDesc();
 }
