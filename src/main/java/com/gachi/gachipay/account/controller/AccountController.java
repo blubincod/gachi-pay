@@ -2,6 +2,7 @@ package com.gachi.gachipay.account.controller;
 
 import com.gachi.gachipay.account.entity.Account;
 import com.gachi.gachipay.account.model.AccountDto;
+import com.gachi.gachipay.account.model.UnregisterAccount;
 import com.gachi.gachipay.account.repository.AccountRepository;
 import com.gachi.gachipay.account.service.AccountService;
 import jakarta.validation.Valid;
@@ -50,17 +51,6 @@ public class AccountController {
     }
 
     /**
-     * 계좌 삭제
-     *
-     * @return
-     */
-    @DeleteMapping("/account/{id}")
-    public ResponseEntity<?> deleteAccount() {
-//        accountService.deleteAccount();
-        return ResponseEntity.ok(null);
-    }
-
-    /**
      * 계좌 정보 수정
      *
      * @return
@@ -69,5 +59,21 @@ public class AccountController {
     public ResponseEntity<?> modifyAccount() {
 
         return ResponseEntity.ok(null);
+    }
+
+    /**
+     * 계좌 해지
+     *
+     * @return
+     */
+    @DeleteMapping("/account")
+    public ResponseEntity<?> deleteAccount(
+            @RequestBody @Valid UnregisterAccount.Request request
+    ) {
+        accountService.deleteAccount(
+                request.getUserId(),
+                request.getAccountNumber());
+
+        return ResponseEntity.ok("deleted");
     }
 }
