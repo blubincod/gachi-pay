@@ -33,6 +33,8 @@ public class AuthController {
 
         var token = this.tokenProvider.generateToken(member.getUsername());
 
+        System.out.println("TOKEN" + token);
+
         return ResponseEntity.ok(token);
     }
 }
