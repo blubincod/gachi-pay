@@ -1,21 +1,24 @@
 package com.gachi.gachipay.member.entity;
 
 
-import jakarta.persistence.*;
-import lombok.*;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 
-
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Getter
+@Data
 @Entity
-@EntityListeners(AuditingEntityListener.class) //감사(auditing) 기능 활성화
 public class Member implements UserDetails {
 
     @Id
@@ -30,6 +33,11 @@ public class Member implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
+        return null;
+    }
+
+    @Override
+    public String getPassword() {
         return null;
     }
 
