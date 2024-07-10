@@ -1,12 +1,9 @@
-package com.gachi.gachipay.global.exception;
+package com.gachi.gachipay.common.exception;
 
 import lombok.*;
 
-@Getter
-@Setter
+@Data
 @AllArgsConstructor
-@NoArgsConstructor
-@Builder
 public class ErrorResponse {
     private ErrorCode errorCode;
     private String ErrorMessage;

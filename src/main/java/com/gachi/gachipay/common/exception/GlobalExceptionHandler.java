@@ -1,4 +1,4 @@
-package com.gachi.gachipay.global.exception;
+package com.gachi.gachipay.common.exception;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -10,6 +10,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(AccountException.class)
     public ErrorResponse handleAccountException(AccountException e) {
+
         log.error("{} is occurred.", e.getErrorCode());
 
         return new ErrorResponse(e.getErrorCode(), e.getErrorMessage());

@@ -6,22 +6,12 @@
 
 ### 주요 기능
 
-인증
-인가
-access token //주기 짧게하여 보안성 높임
-refresh token
-
 ** 타사 혹은 자사의 계좌 혹은 카드가 있다는 가정하에 진행 **<br>
 ** PG(Payment Gateway)로 등록되었다는 가정하에 진행 **<br>
 - [ 회원 ] 
   - 회원 정보 조회
   - 계좌 등록 혹은 카드 등록
-  
-```markdown
-- 로그인 시 Access Token 발급(Redis에 저장)
-- Access Token 유효 기간 1시간
-- Refresh Token 유효 기간 2주 
-```
+
 인증 과정
 
 
@@ -63,6 +53,14 @@ refresh token
 
 중복 거래 방지(AOP)
 - 기타 인프라(Redis)를 활용하여 동시성을 제어
+
+### 보안 
+- access token - 주기 짧게하여 보안성 높임(30분)
+- refresh token - access token 보다 주기 길게 설정(1일)
+
+```markdown
+- 로그인 시 AccessToken & RefreshToken 발급(Redis에 저장)
+```
 
 ### 부가 기능 
 ** 주요 기능 구현 후 추가 예정 **

@@ -2,13 +2,19 @@ spring:
   application:
     name: gachipay
 
+#  redis:
+#    data:
+#      host: localhost
+#      port: 6379
+
   datasource:
-    driver-class-name: org.mariadb.jdbc.Driver
     url: jdbc:mariadb://localhost:3307/gachipay?serverTimezone=UTC&characterEncoding=UTF-8
     username: root
     password: sherlock
+    driver-class-name: org.mariadb.jdbc.Driver
 
   jpa:
+    defer-datasource-initialization: true
     hibernate:
       ddl-auto: update
     show-sql: true
@@ -16,20 +22,8 @@ spring:
       hibernate:
         format_sql: true
 
-#  redis:
-#    host: localhost
-#    port: 6379
-
-#  security:
-#    oauth2:
-#      client:
-#        registration:
-#          google:
-#            redirect-uri: http://localhost:8080/login/oauth2/code/google
-#            scope:
-#              - email
-#              - profile
-#              -
   jwt:
     secret: Z2FjaGlwYXktand0LXNlY3JldC1rZXkK
+
+
 

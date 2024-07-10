@@ -1,11 +1,9 @@
 package com.gachi.gachipay.member.entity;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -17,6 +15,7 @@ import java.util.Collection;
 @Builder
 @Getter
 @Entity
+@EntityListeners(AuditingEntityListener.class) //감사(auditing) 기능 활성화
 public class Member implements UserDetails {
 
     @Id
