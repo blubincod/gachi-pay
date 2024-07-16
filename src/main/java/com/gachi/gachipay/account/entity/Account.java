@@ -40,14 +40,24 @@ public class Account {
 
     private boolean isGroupAccount; //그룹 계좌 여부(그룹 계좌X(default) : false | 그룹 계좌O : true)
 
-    // 잔액 부족 확인
+    //잔고에서 거래 사용 금액 차감
     public void useBalance(Long amount) {
         if (this.balance < amount) {
             throw new AccountException(
                     ErrorCode.LACK_BALANCE,
                     ErrorCode.LACK_BALANCE.getDescription());
         }
-
         this.balance -= amount;
+    }
+
+    //잔고에서 거래 취소 금액 증액
+    public void cancelBalance(Long amount) {
+        if (amount < 0) {
+            throw new AccountException(
+                    ErrorCode.INVALID_REQUEST,
+                    ErrorCode.INVALID_REQUEST.getDescription());
+        }
+
+        this.balance += amount;
     }
 }

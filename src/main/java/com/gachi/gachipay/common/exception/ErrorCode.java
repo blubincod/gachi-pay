@@ -14,7 +14,7 @@ public enum ErrorCode {
     INVALID_REQUEST("잘못된 요청입니다."),
     AMOUNT_EXCEED_BALANCE("해당 거래가 없습니다."),
     TRANSACTION_ACCOUNT_UN_MATCH("이 거래는 해당 계좌에서 발생한 거래가 아닙니다."),
-    TRANSACTION_NOT_FOUND("거래 금액이 계좌 잔액보다 큽니다."),
+    TRANSACTION_NOT_FOUND("해당 거래가 없습니다."),
     ACCOUNT_TRANSACTION_LOCK("해당 계좌는 사용 중입니다."),
     LACK_BALANCE("잔액이 부족합니다."),
     CANCEL_MUST_FULLY("부분 취소는 허용되지 않습니다."),
