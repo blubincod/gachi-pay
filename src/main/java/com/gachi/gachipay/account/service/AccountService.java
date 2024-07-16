@@ -1,7 +1,6 @@
 package com.gachi.gachipay.account.service;
 
 import com.gachi.gachipay.account.entity.Account;
-import com.gachi.gachipay.account.entity.AccountStatus;
 import com.gachi.gachipay.account.model.AccountDto;
 import com.gachi.gachipay.account.repository.AccountRepository;
 import com.gachi.gachipay.common.exception.AccountException;
@@ -13,7 +12,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
+import static com.gachi.gachipay.account.entity.AccountStatus.IN_USE;
 import static com.gachi.gachipay.account.entity.AccountStatus.UNREGISTERED;
 
 @Slf4j
@@ -30,14 +32,12 @@ public class AccountService {
      * @param accountDto
      * @return
      */
-    public Account registerAccount(Long userId, AccountDto accountDto) {
+    public AccountDto registerAccount(Long userId, AccountDto accountDto) {
         // 존재하는 사용자인지 확인
-        boolean existsUser = memberRepository.existsById(userId);
-        if (!existsUser) {
-            throw new AccountException(
-                    ErrorCode.USER_NOT_FOUND,
-                    ErrorCode.USER_NOT_FOUND.getDescription());
-        }
+        Member member = memberRepository.findById(userId)
+                .orElseThrow(() -> new AccountException(
+                        ErrorCode.USER_NOT_FOUND,
+                        ErrorCode.USER_NOT_FOUND.getDescription()));
 
         // 이미 존재하는 계좌인지 확인
         boolean existsAccount = accountRepository.existsByAccountNumber(accountDto.getAccountNumber());
@@ -47,17 +47,33 @@ public class AccountService {
                     ErrorCode.ACCOUNT_EXISTS.getDescription());
         }
 
-        Account result = accountRepository.save(accountDto.toEntity(userId));
+        Account account = accountRepository.save(
+                Account.builder()
+                        .member(member)
+                        .accountNumber(accountDto.getAccountNumber())
+                        .balance(accountDto.getBalance())
+                        .status(IN_USE)
+                        .registeredAt(LocalDateTime.now())
+                        .build());
 
-        return result;
+        return AccountDto.fromEntity(account);
     }
 
     /**
      * 계좌 정보 조회
+     *
+     * @param userId
      */
-    public void getAccount() {
+    public List<AccountDto> getAccountsByUserId(Long userId) {
+        //회원 존재 여부 및 정보 가져오기
+        Member member = memberRepository.findById(userId)
+                .orElseThrow(() -> new AccountException(ErrorCode.USER_NOT_FOUND, ErrorCode.USER_NOT_FOUND.getDescription()));
 
-        System.out.println("GET ACCOUNT");
+        List<Account> accounts = accountRepository.findByMember(member);
+
+        return accounts.stream()
+                .map(AccountDto::fromEntity)
+                .collect(Collectors.toList());
     }
 
     /**
@@ -94,7 +110,7 @@ public class AccountService {
      */
     private void validateDeleteAccount(Member member, Account account) {
         //계좌 소유주 일치 확인
-        if (member.getId() != account.getUserId()) {
+        if (member.getId() != account.getMember().getId()) {
             throw new AccountException(
                     ErrorCode.USER_ACCOUNT_UN_MATCH,
                     ErrorCode.USER_ACCOUNT_UN_MATCH.getDescription());
@@ -107,4 +123,6 @@ public class AccountService {
                     ErrorCode.BALANCE_NOT_EMPTY.getDescription());
         }
     }
+
+
 }

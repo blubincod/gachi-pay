@@ -2,6 +2,7 @@ package com.gachi.gachipay.account.controller;
 
 import com.gachi.gachipay.account.entity.Account;
 import com.gachi.gachipay.account.model.AccountDto;
+import com.gachi.gachipay.account.model.AccountInfo;
 import com.gachi.gachipay.account.model.UnregisterAccount;
 import com.gachi.gachipay.account.repository.AccountRepository;
 import com.gachi.gachipay.account.service.AccountService;
@@ -10,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -31,7 +34,7 @@ public class AccountController {
             @RequestBody @Valid AccountDto accountDto
     ) {
         System.out.println("Registration is in progress...");
-        Account result = accountService.registerAccount(userId, accountDto);
+        AccountDto result = accountService.registerAccount(userId, accountDto);
 
         return ResponseEntity.ok(result);
     }
@@ -42,12 +45,12 @@ public class AccountController {
      * @return
      */
     @GetMapping("/account")
-    public ResponseEntity<?> getAccount(
+    public ResponseEntity<?> getAccountsByUserId(
             @RequestParam("user_id") Long userId
     ) {
-        System.out.println("GET ACCOUNT:)" + userId);
+        List<AccountDto> accounts = accountService.getAccountsByUserId(userId);
 
-        return ResponseEntity.ok(null);
+        return ResponseEntity.ok(accounts);
     }
 
     /**
