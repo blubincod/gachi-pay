@@ -44,8 +44,7 @@ public class Account {
     public void useBalance(Long amount) {
         if (this.balance < amount) {
             throw new AccountException(
-                    ErrorCode.LACK_BALANCE,
-                    ErrorCode.LACK_BALANCE.getDescription());
+                    ErrorCode.LACK_BALANCE);
         }
         this.balance -= amount;
     }
@@ -54,8 +53,7 @@ public class Account {
     public void cancelBalance(Long amount) {
         if (amount < 0) {
             throw new AccountException(
-                    ErrorCode.INVALID_REQUEST,
-                    ErrorCode.INVALID_REQUEST.getDescription());
+                    ErrorCode.INVALID_REQUEST);
         }
 
         this.balance += amount;

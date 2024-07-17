@@ -8,6 +8,9 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 
+/**
+ * 잔액 사용
+ */
 public class UseBalance {
     @Getter
     @Setter

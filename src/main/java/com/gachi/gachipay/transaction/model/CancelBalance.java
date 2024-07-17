@@ -7,6 +7,7 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 
+//잔액 사용 취소
 public class CancelBalance {
     @Getter
     @Setter

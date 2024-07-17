@@ -2,15 +2,13 @@ package com.gachi.gachipay.transaction.controller;
 
 import com.gachi.gachipay.common.exception.AccountException;
 import com.gachi.gachipay.transaction.model.CancelBalance;
+import com.gachi.gachipay.transaction.model.QueryTransactionResponse;
 import com.gachi.gachipay.transaction.model.UseBalance;
 import com.gachi.gachipay.transaction.service.TransactionService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * 거래 관련 컨트롤러
@@ -47,7 +45,7 @@ public class TransactionController {
         }
     }
 
-    //사용 잔액 취소
+    //잔액 사용 취소
     @PostMapping("/transaction/cancel")
     public CancelBalance.Response cancelBalance(
             @RequestBody @Valid CancelBalance.Request request
@@ -70,9 +68,12 @@ public class TransactionController {
         }
     }
 
-    //거래 목록 확인
-    @GetMapping("/transaction/list")
-    public void getTransaction() {
-
+    //거래 관련 Query
+    @GetMapping("/transaction/{transactionId}")
+    public QueryTransactionResponse queryTransactionResponse(
+            @PathVariable String transactionId
+    ) {
+        return QueryTransactionResponse.from(
+                transactionService.queryTransaction(transactionId));
     }
 }

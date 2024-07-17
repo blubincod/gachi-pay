@@ -35,7 +35,7 @@ public class TransactionService {
     private final AccountRepository accountRepository;
 
     /**
-     * 계좌 잔액 사용
+     * 잔액 사용
      */
     public TransactionDto useBalance(Long userId, String accountNumber, Long amount) {
         Member member = memberRepository.findById(userId)
@@ -86,25 +86,22 @@ public class TransactionService {
     public void saveFailedUseTransaction(String accountNumber, Long amount) {
         Account account = accountRepository.findByAccountNumber(accountNumber)
                 .orElseThrow(() -> new AccountException(
-                        ErrorCode.ACCOUNT_NOT_FOUND,
-                        ErrorCode.ACCOUNT_NOT_FOUND.getDescription()));
+                        ErrorCode.ACCOUNT_NOT_FOUND));
 
         saveAndGetTransaction(USE, FAILURE, account, amount);
     }
 
     /**
-     * 사용 잔액 취소
+     * 잔액 사용 취소
      */
     public TransactionDto cancelBalance(String transactionId, String accountNumber, Long amount) {
         Transaction transaction = transactionRepository.findByTransactionId(transactionId)
                 .orElseThrow(() -> new AccountException(
-                        ErrorCode.TRANSACTION_NOT_FOUND,
-                        ErrorCode.TRANSACTION_NOT_FOUND.getDescription()));
+                        ErrorCode.TRANSACTION_NOT_FOUND));
 
         Account account = accountRepository.findByAccountNumber(accountNumber)
                 .orElseThrow(() -> new AccountException(
-                        ErrorCode.ACCOUNT_NOT_FOUND,
-                        ErrorCode.ACCOUNT_NOT_FOUND.getDescription()));
+                        ErrorCode.ACCOUNT_NOT_FOUND));
 
         validateCancelBalance(transaction, account, amount); //유효성 검사 메서드 호출
 
@@ -116,7 +113,7 @@ public class TransactionService {
     }
 
     /**
-     * 사용 잔액 취소 유효성 검사
+     * 잔액 사용 취소 유효성 검사
      * 1. 해당 계좌에서의 거래인지 확인
      * 2. 부분 취소는 취소 불가
      * 3. 6개월이 지난 거래 취소 불가
@@ -142,13 +139,12 @@ public class TransactionService {
     }
 
     /**
-     * 사용 잔액 취소 실패
+     * 잔액 사용 취소 실패
      */
     public void saveFailedCancelTransaction(String accountNumber, Long amount) {
         Account account = accountRepository.findByAccountNumber(accountNumber)
                 .orElseThrow(() -> new AccountException(
-                        ErrorCode.ACCOUNT_NOT_FOUND,
-                        ErrorCode.ACCOUNT_NOT_FOUND.getDescription()));
+                        ErrorCode.ACCOUNT_NOT_FOUND));
 
         saveAndGetTransaction(CANCEL, FAILURE, account, amount);
     }
@@ -171,5 +167,14 @@ public class TransactionService {
                         .transactedAt(LocalDateTime.now())
                         .build()
         );
+    }
+
+    //거래 관련 Query
+    public TransactionDto queryTransaction(String transactionId) {
+
+        return TransactionDto.fromEntity(transactionRepository.findByTransactionId(transactionId)
+                .orElseThrow(() -> new AccountException(
+                        ErrorCode.TRANSACTION_NOT_FOUND,
+                        ErrorCode.TRANSACTION_NOT_FOUND.getDescription())));
     }
 }
