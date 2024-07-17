@@ -20,7 +20,7 @@ import java.io.IOException;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     public static final String TOKEN_HEADER = "Authorization";
-    public static final String TOKEN_PREFIX = "Bearer "; //인증 타입
+    public static final String TOKEN_PREFIX = "Bearer "; // 인증 타입
 
     private final TokenProvider tokenProvider;
 
@@ -42,7 +42,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String token = request.getHeader(TOKEN_HEADER);
 
         if (!ObjectUtils.isEmpty(token) && token.startsWith(TOKEN_PREFIX)) {
-            return token.substring(TOKEN_PREFIX.length()); //실제 토큰 부분 추출
+            return token.substring(TOKEN_PREFIX.length()); // 실제 토큰 부분 추출
         }
 
         return null;

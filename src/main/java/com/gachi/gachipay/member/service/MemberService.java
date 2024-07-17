@@ -34,15 +34,15 @@ public class MemberService implements UserDetailsService {
     public Member register(Auth.SignUp member) {
         boolean exists = this.memberRepository.existsByUsername(member.getUsername());
 
-        //username 중복 체크
+        // username 중복 체크
         if (exists) {
             throw new RuntimeException("이미 존재하는 사용자입니다.");
         }
 
-        //비밀번호 암호화
+        // 비밀번호 암호화
         member.setPassword(this.passwordEncoder.encode(member.getPassword()));
 
-        //member 테이블에 저장
+        // member 테이블에 저장
         var result = this.memberRepository.save(member.toEntity());
 
 

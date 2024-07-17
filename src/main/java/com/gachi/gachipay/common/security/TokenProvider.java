@@ -19,8 +19,8 @@ import java.util.Date;
 @RequiredArgsConstructor
 public class TokenProvider {
 
-//    private static final long TOKEN_EXPIRE_TIME = 1000 * 60; // 1분
-    private static final long TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 2; // 2시간
+// private static final long TOKEN_EXPIRE_TIME = 1000 * 60; //  1분
+    private static final long TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 2; //  2시간
 
     private final MemberService memberService;
 
@@ -41,9 +41,9 @@ public class TokenProvider {
 
         return Jwts.builder()
                 .setClaims(claims)
-                .setIssuedAt(now) //토큰 생성 시간
-                .setExpiration(expiredDate) //토큰 만료 시간
-                .signWith(SignatureAlgorithm.HS512, this.secretKey) //사용할 암호화 알고리즘, 비밀키
+                .setIssuedAt(now) // 토큰 생성 시간
+                .setExpiration(expiredDate) // 토큰 만료 시간
+                .signWith(SignatureAlgorithm.HS512, this.secretKey) // 사용할 암호화 알고리즘, 비밀키
                 .compact();
     }
 
@@ -73,7 +73,7 @@ public class TokenProvider {
     public boolean validateToken(String token) {
         if (!StringUtils.hasText(token)) return false;
         var claims = this.parseClaims(token);
-        return !claims.getExpiration().before(new Date()); //만료시간이 현재시간 보다 전인지 검사
+        return !claims.getExpiration().before(new Date()); // 만료시간이 현재시간 보다 전인지 검사
     }
 
     /**

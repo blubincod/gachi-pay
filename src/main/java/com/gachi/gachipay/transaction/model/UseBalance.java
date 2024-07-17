@@ -36,9 +36,9 @@ public class UseBalance {
         private String transactionId;
         private TransactionResultType transactionResult;
         private Long amount;
-        private Long paid_amount; //지불된 금액
-        private Long refund_amount; //환불된 금액
-        private LocalDateTime transactedAt; //거래 일시
+        private Long paid_amount; // 지불된 금액
+        private Long refund_amount; // 환불된 금액
+        private LocalDateTime transactedAt; // 거래 일시
 
         public static Response from(TransactionDto transactionDto){
             return Response.builder()

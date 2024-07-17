@@ -7,7 +7,7 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 
-//잔액 사용 취소
+// 잔액 사용 취소
 public class CancelBalance {
     @Getter
     @Setter
@@ -33,9 +33,9 @@ public class CancelBalance {
         private String transactionId;
         private TransactionResultType transactionResult;
         private Long amount;
-        private Long paid_amount; //지불된 금액
-        private Long refund_amount; //환불된 금액
-        private LocalDateTime transactedAt; //거래 일시
+        private Long paid_amount; // 지불된 금액
+        private Long refund_amount; // 환불된 금액
+        private LocalDateTime transactedAt; // 거래 일시
 
         public static Response from(TransactionDto transactionDto) {
             return Response.builder()

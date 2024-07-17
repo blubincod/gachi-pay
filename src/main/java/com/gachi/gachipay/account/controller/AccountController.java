@@ -1,11 +1,10 @@
 package com.gachi.gachipay.account.controller;
 
-import com.gachi.gachipay.account.entity.Account;
 import com.gachi.gachipay.account.model.AccountDto;
-import com.gachi.gachipay.account.model.AccountInfo;
 import com.gachi.gachipay.account.model.UnregisterAccount;
 import com.gachi.gachipay.account.repository.AccountRepository;
 import com.gachi.gachipay.account.service.AccountService;
+import com.gachi.gachipay.common.service.RedisTestService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +18,13 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AccountController {
     private final AccountService accountService;
-    private final AccountRepository accountRepository;
+//    private final RedisTestService redisTestService;
+
+//    @GetMapping("/get-lcok")
+//    public String getLock() {
+//        System.out.println("HELLO CONTROLLER");
+//        return redisTestService.getLock();
+//    }
 
     /**
      * 계좌 정보 등록

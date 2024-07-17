@@ -47,9 +47,9 @@ public class TransactionService {
                         ErrorCode.ACCOUNT_NOT_FOUND,
                         ErrorCode.ACCOUNT_NOT_FOUND.getDescription()));
 
-        validateUseBalance(member, account, amount); //유효성 검사 메서드 호출
+        validateUseBalance(member, account, amount); // 유효성 검사 메서드 호출
 
-        account.useBalance(amount); //잔액 부족 검사 메서드 호출
+        account.useBalance(amount); // 잔액 부족 검사 메서드 호출
 
         Transaction transaction = saveAndGetTransaction(USE, SUCCESS, account, amount);
 
@@ -103,9 +103,9 @@ public class TransactionService {
                 .orElseThrow(() -> new AccountException(
                         ErrorCode.ACCOUNT_NOT_FOUND));
 
-        validateCancelBalance(transaction, account, amount); //유효성 검사 메서드 호출
+        validateCancelBalance(transaction, account, amount); // 유효성 검사 메서드 호출
 
-        account.cancelBalance(amount); //거래 취소 금액 확인 후 처리
+        account.cancelBalance(amount); // 거래 취소 금액 확인 후 처리
 
         transaction = saveAndGetTransaction(CANCEL, SUCCESS, account, amount);
 
@@ -117,7 +117,7 @@ public class TransactionService {
      * 1. 해당 계좌에서의 거래인지 확인
      * 2. 부분 취소는 취소 불가
      * 3. 6개월이 지난 거래 취소 불가
-     * //TODO 4. 이미 취소한 거래인지 확인
+     * // TODO 4. 이미 취소한 거래인지 확인
      */
     private void validateCancelBalance(Transaction transaction, Account account, Long amount) {
         if (transaction.getAccount().getId() != account.getMember().getId()) {
@@ -169,7 +169,7 @@ public class TransactionService {
         );
     }
 
-    //거래 관련 Query
+    // 거래 관련 Query
     public TransactionDto queryTransaction(String transactionId) {
 
         return TransactionDto.fromEntity(transactionRepository.findByTransactionId(transactionId)

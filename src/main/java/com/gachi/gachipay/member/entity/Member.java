@@ -5,7 +5,10 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -20,13 +23,13 @@ public class Member implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id; //아이디
+    private Long id; // 아이디
 
-    private String username; //회원 이름
+    private String username; // 회원 이름
 
-    private String password; //비밀번호
+    private String password; // 비밀번호
 
-    private String phoneNumber; //전화번호
+    private String phoneNumber; // 전화번호
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
