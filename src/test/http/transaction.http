@@ -1,0 +1,50 @@
+# 거래 테스트
+# client1 accessToken
+@accessToken = eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJjbGllbnQxIiwiaWF0IjoxNzIxMzA3Mjg4LCJleHAiOjE3MjEzMTQ0ODh9.zdJ9uGiXrL-f6CzLBJxdAnGKnFjqcshMSUuQ_NbWrnMke5NOlnUd6oVcpjTE_AxzyhEzbvZ84MDfi-EjNTLRhA
+
+# 잔액 사용 및 중복 거래 테스트
+### use balance1
+POST http://localhost:8080/transaction/use
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "userId": 1,
+  "accountNumber": "1234-1111",
+  "amount": 10
+}
+
+### use balance2
+POST http://localhost:8080/transaction/use
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "userId": 1,
+  "accountNumber": "1234-1111",
+  "amount": 20
+}
+
+### use balance3
+POST http://localhost:8080/transaction/use
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "userId": 1,
+  "accountNumber": "1234-1111",
+  "amount": 30
+}
+
+### cancel balance
+POST http://localhost:8080/transaction/cancel
+Content-Type: application/json
+
+{
+  "transactionId": "6798598a387c4e76bad008161798f048",
+  "accountNumber": "1000000000",
+  "amount": 3
+}
+
+### query transaction
+GET http://localhost:8080/transaction/3925a42678fb4f7898bf8e8b1f071645

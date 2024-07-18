@@ -5,7 +5,7 @@ spring:
   data:
     redis:
       host: localhost
-      port: 6380
+      port: 6379
 
   datasource:
     url: jdbc:mariadb:// localhost:3307/gachipay?serverTimezone=UTC&characterEncoding=UTF-8

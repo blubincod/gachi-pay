@@ -1,6 +1,6 @@
 package com.gachi.gachipay.transaction.model;
 
-import com.gachi.gachipay.transaction.entity.Transaction;
+import com.gachi.gachipay.common.aop.AccountLockIdInterface;
 import com.gachi.gachipay.transaction.entity.TransactionResultType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -15,7 +15,7 @@ public class UseBalance {
     @Getter
     @Setter
     @AllArgsConstructor
-    public static class Request {
+    public static class Request implements AccountLockIdInterface {
         @NotNull
         private Long userId;
 
@@ -40,7 +40,7 @@ public class UseBalance {
         private Long refund_amount; // 환불된 금액
         private LocalDateTime transactedAt; // 거래 일시
 
-        public static Response from(TransactionDto transactionDto){
+        public static Response from(TransactionDto transactionDto) {
             return Response.builder()
                     .accountNumber(transactionDto.getAccountNumber())
                     .transactionId(transactionDto.getTransactionId())

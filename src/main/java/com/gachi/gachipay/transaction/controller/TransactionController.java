@@ -1,7 +1,7 @@
 package com.gachi.gachipay.transaction.controller;
 
+import com.gachi.gachipay.common.aop.AccountLock;
 import com.gachi.gachipay.common.exception.AccountException;
-import com.gachi.gachipay.transaction.aop.AccountLock;
 import com.gachi.gachipay.transaction.model.CancelBalance;
 import com.gachi.gachipay.transaction.model.QueryTransactionResponse;
 import com.gachi.gachipay.transaction.model.UseBalance;
@@ -28,8 +28,9 @@ public class TransactionController {
     @PostMapping("/transaction/use")
     public UseBalance.Response useBalance(
             @RequestBody @Valid UseBalance.Request request
-    ) {
+    ) throws InterruptedException {
         try {
+            Thread.sleep(3000L);
             return UseBalance.Response.from(
                     transactionService.useBalance(
                             request.getUserId(),

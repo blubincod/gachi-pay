@@ -18,13 +18,13 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AccountController {
     private final AccountService accountService;
-//    private final RedisTestService redisTestService;
+    private final RedisTestService redisTestService;
 
-//    @GetMapping("/get-lcok")
-//    public String getLock() {
-//        System.out.println("HELLO CONTROLLER");
-//        return redisTestService.getLock();
-//    }
+    @GetMapping("/get-lock")
+    public String getLock() {
+        System.out.println("HELLO CONTROLLER");
+        return redisTestService.getLock();
+    }
 
     /**
      * 계좌 정보 등록

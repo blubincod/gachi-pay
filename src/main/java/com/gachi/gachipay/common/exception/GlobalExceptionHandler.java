@@ -19,7 +19,7 @@ public class GlobalExceptionHandler {
 
         log.error("{} is occurred.", e.getErrorCode());
 
-        return new ErrorResponse(e.getErrorCode(), e.getErrorMessage());
+        return new ErrorResponse(e.getErrorCode(), e.getErrorCode().getDescription());
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)

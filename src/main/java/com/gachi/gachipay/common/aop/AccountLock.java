@@ -1,4 +1,4 @@
-package com.gachi.gachipay.transaction.aop;
+package com.gachi.gachipay.common.aop;
 
 import java.lang.annotation.*;
 
