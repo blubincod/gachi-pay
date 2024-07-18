@@ -27,16 +27,10 @@ public class AccountService {
 
     /**
      * 계좌 등록
-     *
-     * @param userId
-     * @param accountDto
-     * @return
      */
     public AccountDto registerAccount(Long userId, AccountDto accountDto) {
         //  존재하는 사용자인지 확인
-        Member member = memberRepository.findById(userId)
-                .orElseThrow(() -> new AccountException(
-                        ErrorCode.USER_NOT_FOUND));
+        Member member = getMember(userId);
 
         //  이미 존재하는 계좌인지 확인
         boolean existsAccount = accountRepository.existsByAccountNumber(accountDto.getAccountNumber());
@@ -59,13 +53,10 @@ public class AccountService {
 
     /**
      * 계좌 정보 조회
-     *
-     * @param userId
      */
     public List<AccountDto> getAccountsByUserId(Long userId) {
         // 회원 존재 여부 및 정보 가져오기
-        Member member = memberRepository.findById(userId)
-                .orElseThrow(() -> new AccountException(ErrorCode.USER_NOT_FOUND));
+        Member member = getMember(userId);
 
         List<Account> accounts = accountRepository.findByMember(member);
 
@@ -76,14 +67,9 @@ public class AccountService {
 
     /**
      * 계좌 해지
-     *
-     * @param userId
-     * @param accountNumber
      */
     public void deleteAccount(Long userId, String accountNumber) {
-        Member member = memberRepository.findById(userId)
-                .orElseThrow(() -> new AccountException(
-                        ErrorCode.USER_NOT_FOUND));
+        Member member = getMember(userId);
 
         Account account = accountRepository.findByAccountNumber(accountNumber)
                 .orElseThrow(() -> new AccountException(
@@ -100,9 +86,6 @@ public class AccountService {
 
     /**
      * 계좌 해지를 위한 유효성 검사
-     *
-     * @param member
-     * @param account
      */
     private void validateDeleteAccount(Member member, Account account) {
         // 계좌 소유주 일치 확인
@@ -118,5 +101,10 @@ public class AccountService {
         }
     }
 
-
+    // 회원 정보 가져오기
+    private Member getMember(Long userId) {
+        Member member = memberRepository.findById(userId)
+                .orElseThrow(() -> new AccountException(ErrorCode.USER_NOT_FOUND));
+        return member;
+    }
 }

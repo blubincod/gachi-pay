@@ -40,12 +40,8 @@ public class TransactionService {
     public TransactionDto useBalance(Long userId, String accountNumber, Long amount) {
         Member member = memberRepository.findById(userId)
                 .orElseThrow(() -> new AccountException(
-                        ErrorCode.USER_NOT_FOUND,
-                        ErrorCode.USER_NOT_FOUND.getDescription()));
-        Account account = accountRepository.findByAccountNumber(accountNumber)
-                .orElseThrow(() -> new AccountException(
-                        ErrorCode.ACCOUNT_NOT_FOUND,
-                        ErrorCode.ACCOUNT_NOT_FOUND.getDescription()));
+                        ErrorCode.USER_NOT_FOUND));
+        Account account = getAccount(accountNumber);
 
         validateUseBalance(member, account, amount); // 유효성 검사 메서드 호출
 
@@ -84,9 +80,7 @@ public class TransactionService {
      * 잔액 사용 실패
      */
     public void saveFailedUseTransaction(String accountNumber, Long amount) {
-        Account account = accountRepository.findByAccountNumber(accountNumber)
-                .orElseThrow(() -> new AccountException(
-                        ErrorCode.ACCOUNT_NOT_FOUND));
+        Account account = getAccount(accountNumber);
 
         saveAndGetTransaction(USE, FAILURE, account, amount);
     }
@@ -99,9 +93,7 @@ public class TransactionService {
                 .orElseThrow(() -> new AccountException(
                         ErrorCode.TRANSACTION_NOT_FOUND));
 
-        Account account = accountRepository.findByAccountNumber(accountNumber)
-                .orElseThrow(() -> new AccountException(
-                        ErrorCode.ACCOUNT_NOT_FOUND));
+        Account account = getAccount(accountNumber);
 
         validateCancelBalance(transaction, account, amount); // 유효성 검사 메서드 호출
 
@@ -142,9 +134,7 @@ public class TransactionService {
      * 잔액 사용 취소 실패
      */
     public void saveFailedCancelTransaction(String accountNumber, Long amount) {
-        Account account = accountRepository.findByAccountNumber(accountNumber)
-                .orElseThrow(() -> new AccountException(
-                        ErrorCode.ACCOUNT_NOT_FOUND));
+        Account account = getAccount(accountNumber);
 
         saveAndGetTransaction(CANCEL, FAILURE, account, amount);
     }
@@ -176,5 +166,13 @@ public class TransactionService {
                 .orElseThrow(() -> new AccountException(
                         ErrorCode.TRANSACTION_NOT_FOUND,
                         ErrorCode.TRANSACTION_NOT_FOUND.getDescription())));
+    }
+
+    // 계좌 정보 가져오기
+    private Account getAccount(String accountNumber) {
+        Account account = accountRepository.findByAccountNumber(accountNumber)
+                .orElseThrow(() -> new AccountException(
+                        ErrorCode.ACCOUNT_NOT_FOUND));
+        return account;
     }
 }
