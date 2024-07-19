@@ -6,7 +6,7 @@ public class RegisterAccount {
     @Getter
     @Setter
     public static class Request {
-        private Long initialBalance; //초기 잔액
+        private Long initialBalance; // 초기 잔액
     }
 
     @Getter
@@ -15,7 +15,7 @@ public class RegisterAccount {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class Response {
-        private Long initialBalance; //초기 잔액
+        private Long initialBalance; // 초기 잔액
     }
 
 }

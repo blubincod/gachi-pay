@@ -25,16 +25,16 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(AbstractHttpConfigurer::disable) //Cross-Site Request Forgery 보호를 비활성화
-                .formLogin(AbstractHttpConfigurer::disable) //폼 기반 로그인을 비활성화
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) //세션을 생성하지 않는 상태 없는(stateless) 정책을 설정
-                .authorizeHttpRequests(authorizeRequest -> authorizeRequest //인가 규칙
+                .csrf(AbstractHttpConfigurer::disable) // Cross-Site Request Forgery 보호를 비활성화
+                .formLogin(AbstractHttpConfigurer::disable) // 폼 기반 로그인을 비활성화
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // 세션을 생성하지 않는 상태 없는(stateless) 정책을 설정
+                .authorizeHttpRequests(authorizeRequest -> authorizeRequest // 인가 규칙
                         .requestMatchers(
                                 AntPathRequestMatcher.antMatcher("/auth/**"))
                         .permitAll()
-                        .anyRequest().authenticated() // 다른 모든 요청은 인증 필요
+                        .anyRequest().authenticated() //  다른 모든 요청은 인증 필요
                 )
-                .addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class); //커스텀 필터
+                .addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class); // 커스텀 필터
 
         return http.build();
     }

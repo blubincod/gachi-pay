@@ -20,25 +20,25 @@ public class Transaction {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id; //아이디
+    private Long id; // 아이디
 
-    private String transactionId; //거래 고유 아이디
-    private String transactionTitle; //거래 제목
+    private String transactionId; // 거래 고유 아이디
+    private String transactionTitle; // 거래 제목
 
     @Enumerated(EnumType.STRING)
-    private TransactionType transactionType; //거래 유형
+    private TransactionType transactionType; // 거래 유형
     @Enumerated(EnumType.STRING)
     private TransactionResultType transactionResult;
 
     @ManyToOne
     private Account account;
 
-    private Long amount; //거래 금액
-    private Long paidAmount; //결제된 금액
-    private Long refundAmount; //환불된 금액
+    private Long amount; // 거래 금액
+    private Long paidAmount; // 결제된 금액
+    private Long refundAmount; // 환불된 금액
     private Long balanceSnapshot;
 
-    private LocalDateTime transactedAt; //거래 일시
+    private LocalDateTime transactedAt; // 거래 일시
 
     @CreatedDate
     private LocalDateTime createdAt;

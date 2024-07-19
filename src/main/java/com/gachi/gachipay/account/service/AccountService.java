@@ -27,24 +27,16 @@ public class AccountService {
 
     /**
      * 계좌 등록
-     *
-     * @param userId
-     * @param accountDto
-     * @return
      */
     public AccountDto registerAccount(Long userId, AccountDto accountDto) {
-        // 존재하는 사용자인지 확인
-        Member member = memberRepository.findById(userId)
-                .orElseThrow(() -> new AccountException(
-                        ErrorCode.USER_NOT_FOUND,
-                        ErrorCode.USER_NOT_FOUND.getDescription()));
+        //  존재하는 사용자인지 확인
+        Member member = getMember(userId);
 
-        // 이미 존재하는 계좌인지 확인
+        //  이미 존재하는 계좌인지 확인
         boolean existsAccount = accountRepository.existsByAccountNumber(accountDto.getAccountNumber());
         if (existsAccount) {
             throw new AccountException(
-                    ErrorCode.ACCOUNT_EXISTS,
-                    ErrorCode.ACCOUNT_EXISTS.getDescription());
+                    ErrorCode.ACCOUNT_EXISTS);
         }
 
         Account account = accountRepository.save(
@@ -61,13 +53,10 @@ public class AccountService {
 
     /**
      * 계좌 정보 조회
-     *
-     * @param userId
      */
     public List<AccountDto> getAccountsByUserId(Long userId) {
-        //회원 존재 여부 및 정보 가져오기
-        Member member = memberRepository.findById(userId)
-                .orElseThrow(() -> new AccountException(ErrorCode.USER_NOT_FOUND, ErrorCode.USER_NOT_FOUND.getDescription()));
+        // 회원 존재 여부 및 정보 가져오기
+        Member member = getMember(userId);
 
         List<Account> accounts = accountRepository.findByMember(member);
 
@@ -78,23 +67,16 @@ public class AccountService {
 
     /**
      * 계좌 해지
-     *
-     * @param userId
-     * @param accountNumber
      */
     public void deleteAccount(Long userId, String accountNumber) {
-        Member member = memberRepository.findById(userId)
-                .orElseThrow(() -> new AccountException(
-                        ErrorCode.USER_NOT_FOUND,
-                        ErrorCode.USER_NOT_FOUND.getDescription()));
+        Member member = getMember(userId);
 
         Account account = accountRepository.findByAccountNumber(accountNumber)
                 .orElseThrow(() -> new AccountException(
-                        ErrorCode.USER_NOT_FOUND,
-                        ErrorCode.USER_NOT_FOUND.getDescription()));
+                        ErrorCode.USER_NOT_FOUND));
 
 
-        validateDeleteAccount(member, account); //계좌 해지를 위한 유효성 검사
+        validateDeleteAccount(member, account); // 계좌 해지를 위한 유효성 검사
 
         account.setStatus(UNREGISTERED);
         account.setUnregisteredAt(LocalDateTime.now());
@@ -104,25 +86,25 @@ public class AccountService {
 
     /**
      * 계좌 해지를 위한 유효성 검사
-     *
-     * @param member
-     * @param account
      */
     private void validateDeleteAccount(Member member, Account account) {
-        //계좌 소유주 일치 확인
+        // 계좌 소유주 일치 확인
         if (member.getId() != account.getMember().getId()) {
             throw new AccountException(
-                    ErrorCode.USER_ACCOUNT_UN_MATCH,
-                    ErrorCode.USER_ACCOUNT_UN_MATCH.getDescription());
+                    ErrorCode.USER_ACCOUNT_UN_MATCH);
         }
 
-        //계좌의 잔액 확인
+        // 계좌의 잔액 확인
         if (account.getBalance() > 0) {
             throw new AccountException(
-                    ErrorCode.BALANCE_NOT_EMPTY,
-                    ErrorCode.BALANCE_NOT_EMPTY.getDescription());
+                    ErrorCode.BALANCE_NOT_EMPTY);
         }
     }
 
-
+    // 회원 정보 가져오기
+    private Member getMember(Long userId) {
+        Member member = memberRepository.findById(userId)
+                .orElseThrow(() -> new AccountException(ErrorCode.USER_NOT_FOUND));
+        return member;
+    }
 }

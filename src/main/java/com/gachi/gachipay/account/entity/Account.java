@@ -16,38 +16,46 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Entity
-@EntityListeners(AuditingEntityListener.class) //감사(auditing) 기능 활성화
+@EntityListeners(AuditingEntityListener.class) // 감사(auditing) 기능 활성화
 public class Account {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id; //아이디
+    private Long id; // 아이디
 
     @ManyToOne
-    private Member member; //사용자
+    private Member member; // 사용자
 
     @NotNull
-    private String accountNumber; //계좌번호
+    private String accountNumber; // 계좌번호
 
     @NotNull
-    private Long balance; //잔고
+    private Long balance; // 잔고
 
     @Enumerated(EnumType.STRING)
-    private AccountStatus status; //계좌 상태
+    private AccountStatus status; // 계좌 상태
 
-    private LocalDateTime registeredAt; //계좌 등록 일시
-    private LocalDateTime unregisteredAt; //계좌 해지 일시
+    private LocalDateTime registeredAt; // 계좌 등록 일시
+    private LocalDateTime unregisteredAt; // 계좌 해지 일시
 
-    private boolean isGroupAccount; //그룹 계좌 여부(그룹 계좌X(default) : false | 그룹 계좌O : true)
+    private boolean isGroupAccount; // 그룹 계좌 여부(그룹 계좌X(default) : false | 그룹 계좌O : true)
 
-    // 잔액 부족 확인
+    // 잔고에서 거래 사용 금액 차감
     public void useBalance(Long amount) {
         if (this.balance < amount) {
             throw new AccountException(
-                    ErrorCode.LACK_BALANCE,
-                    ErrorCode.LACK_BALANCE.getDescription());
+                    ErrorCode.LACK_BALANCE);
+        }
+        this.balance -= amount;
+    }
+
+    // 잔고에서 거래 취소 금액 증액
+    public void cancelBalance(Long amount) {
+        if (amount < 0) {
+            throw new AccountException(
+                    ErrorCode.INVALID_REQUEST);
         }
 
-        this.balance -= amount;
+        this.balance += amount;
     }
 }

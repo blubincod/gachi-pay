@@ -10,12 +10,12 @@ public class Bank {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id; //은행 아이디
+    Long id; //  은행 아이디
 
-    String bankName; //은행 이름
+    String bankName; //  은행 이름
 
-    String owner; //계좌 소유자
+    String owner; //  계좌 소유자
 
-    long balance; //잔고
+    long balance; //  잔고
 
 }

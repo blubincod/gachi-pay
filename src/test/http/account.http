@@ -1,0 +1,11 @@
+# 계좌 테스트
+### get accessToken
+POST http://localhost:8080/auth/signin
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJjbGllbnQxIiwiaWF0IjoxNzIxMzAwNzk1LCJleHAiOjE3MjEzMDc5OTV9.YCjBy7iqEOw_pW-T22568DMwLD70uPnhcdi5IGKDmtkwZyETTm0lbD8YDS8xjCYzjOmyCdZ_CbkOXqUYVBN4Ig
+
+{
+  "userId": 1,
+  "accountNumber": "1234-1111",
+  "amount": 3
+}

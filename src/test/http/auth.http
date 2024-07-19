@@ -1,0 +1,9 @@
+# 인증 테스트
+### get accessToken
+POST http://localhost:8080/auth/signin
+Content-Type: application/json
+
+{
+  "username" : "client1",
+  "password" : "123"
+}

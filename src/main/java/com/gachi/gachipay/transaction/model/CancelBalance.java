@@ -1,6 +1,5 @@
 package com.gachi.gachipay.transaction.model;
 
-import com.gachi.gachipay.common.aop.AccountLockIdInterface;
 import com.gachi.gachipay.transaction.entity.TransactionResultType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -8,16 +7,14 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 
-/**
- * 잔액 사용
- */
-public class UseBalance {
+// 잔액 사용 취소
+public class CancelBalance {
     @Getter
     @Setter
     @AllArgsConstructor
-    public static class Request implements AccountLockIdInterface {
+    public static class Request {
         @NotNull
-        private Long userId;
+        private String transactionId;
 
         @NotBlank
         private String accountNumber;

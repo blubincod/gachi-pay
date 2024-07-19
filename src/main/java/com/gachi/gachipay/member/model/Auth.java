@@ -17,7 +17,7 @@ public class Auth {
         private String password;
         private String phoneNumber;
 
-        public Member toEntity(){
+        public Member toEntity() {
             return Member.builder()
                     .username(this.username)
                     .password(this.password)

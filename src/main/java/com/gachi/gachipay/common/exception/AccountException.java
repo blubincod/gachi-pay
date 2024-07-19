@@ -7,4 +7,9 @@ import lombok.*;
 public class AccountException extends RuntimeException {
     ErrorCode errorCode;
     String errorMessage;
+
+    public AccountException(ErrorCode errorCode) {
+        this.errorCode = errorCode;
+        this.errorMessage = getErrorMessage();
+    }
 }
