@@ -37,8 +37,8 @@ public class TransactionService {
     /**
      * 잔액 사용
      */
-    public TransactionDto useBalance(Long userId, String accountNumber, Long amount) {
-        Member member = memberRepository.findById(userId)
+    public TransactionDto useBalance(Long memberId, String accountNumber, Long amount) {
+        Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new AccountException(
                         ErrorCode.USER_NOT_FOUND));
         Account account = getAccount(accountNumber);

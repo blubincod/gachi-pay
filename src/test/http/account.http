@@ -1,11 +1,39 @@
-# 계좌 테스트
-### get accessToken
-POST http://localhost:8080/auth/signin
+# Account 테스트
+
+### AccessToken
+@accessToken = eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJjbGllbnQxIiwiaWF0IjoxNzIxNDgwMjY5LCJleHAiOjE3MjE0ODc0Njl9.AsWs4Z1gPZZsoeXbJ7A26aSm-6VQYFnFT2E2WqmaG1U6K-NuJzoUMEQdtCvU-Ss7tICs54pZAvLNlrpfTl6pgg
+
+### register account
+POST http://localhost:8080/api/v1/account?member_id=1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJjbGllbnQxIiwiaWF0IjoxNzIxMzAwNzk1LCJleHAiOjE3MjEzMDc5OTV9.YCjBy7iqEOw_pW-T22568DMwLD70uPnhcdi5IGKDmtkwZyETTm0lbD8YDS8xjCYzjOmyCdZ_CbkOXqUYVBN4Ig
+Authorization: Bearer {{accessToken}}
 
 {
-  "userId": 1,
-  "accountNumber": "1234-1111",
-  "amount": 3
+  "accountNumber": "1234-4444",
+  "balance": 11114
+}
+
+### get member accounts
+GET http://localhost:8080/api/v1/account?member_id=1
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+### modify account Information
+GET http://localhost:8080/api/v1/account
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "memberId": 1,
+  "accountNumber": "1234-1111"
+}
+
+### unregister account
+DELETE http://localhost:8080/api/v1/account
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "memberId": 1,
+  "accountNumber": "1234-1111"
 }

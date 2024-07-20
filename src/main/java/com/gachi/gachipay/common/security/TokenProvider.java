@@ -1,6 +1,6 @@
 package com.gachi.gachipay.common.security;
 
-import com.gachi.gachipay.member.service.MemberService;
+import com.gachi.gachipay.member.service.AuthService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -22,7 +22,7 @@ public class TokenProvider {
 // private static final long TOKEN_EXPIRE_TIME = 1000 * 60; //  1분
     private static final long TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 2; //  2시간
 
-    private final MemberService memberService;
+    private final AuthService authService;
 
     @Value("{spring.jwt.secret}")
     private String secretKey;
@@ -55,7 +55,7 @@ public class TokenProvider {
      */
     public Authentication getAuthentication(String jwt) {
 
-        UserDetails userDetails = this.memberService.loadUserByUsername(this.getUsername(jwt));
+        UserDetails userDetails = this.authService.loadUserByUsername(this.getUsername(jwt));
 
         return new UsernamePasswordAuthenticationToken(userDetails, "",userDetails.getAuthorities());
     }

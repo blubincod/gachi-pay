@@ -17,7 +17,7 @@ public class UseBalance {
     @AllArgsConstructor
     public static class Request implements AccountLockIdInterface {
         @NotNull
-        private Long userId;
+        private Long memberId;
 
         @NotBlank
         private String accountNumber;

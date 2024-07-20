@@ -4,21 +4,21 @@ import com.gachi.gachipay.common.exception.AccountException;
 import com.gachi.gachipay.common.exception.ErrorCode;
 import com.gachi.gachipay.member.entity.Member;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @EntityListeners(AuditingEntityListener.class) // 감사(auditing) 기능 활성화
 public class Account {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id; // 아이디
@@ -26,7 +26,7 @@ public class Account {
     @ManyToOne
     private Member member; // 사용자
 
-    @NotNull
+    @NotBlank
     private String accountNumber; // 계좌번호
 
     @NotNull
@@ -37,8 +37,6 @@ public class Account {
 
     private LocalDateTime registeredAt; // 계좌 등록 일시
     private LocalDateTime unregisteredAt; // 계좌 해지 일시
-
-    private boolean isGroupAccount; // 그룹 계좌 여부(그룹 계좌X(default) : false | 그룹 계좌O : true)
 
     // 잔고에서 거래 사용 금액 차감
     public void useBalance(Long amount) {
