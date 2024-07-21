@@ -19,8 +19,9 @@ public enum ErrorCode {
     TRANSACTION_NOT_FOUND("해당 거래가 없습니다."),
     AMOUNT_EXCEED_BALANCE("금액이 잔액을 초과했습니다."),
     ACCOUNT_TRANSACTION_LOCK("해당 계좌는 사용 중입니다."),
-    TRANSACTION_ACCOUNT_UN_MATCH("이 거래는 해당 계좌에서 발생한 거래가 아닙니다."),
+    TRANSACTION_ACCOUNT_MISMATCH("이 거래는 해당 계좌에서 발생한 거래가 아닙니다."),
     CANCEL_MUST_FULLY("부분 취소는 허용되지 않습니다."),
+    CANCEL_AMOUNT_MISMATCH("취소할 금액이 일치하지 않습니다."),
     TOO_OLD_ORDER_TO_CANCEL("6개월이 지난 거래는 취소가 불가능합니다."),
     // Team
     TEAM_NOT_FOUND("해당 그룹이 존재하지 않습니다."),

@@ -16,6 +16,8 @@ public class CancelBalance {
         @NotNull
         private String transactionId;
 
+        private Long teamId;
+
         @NotBlank
         private String accountNumber;
 

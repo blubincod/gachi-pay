@@ -1,7 +1,7 @@
 # Transaction 테스트
 
 ### AccessToken
-@accessToken = eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJjbGllbnQxIiwiaWF0IjoxNzIxNDgxMjI4LCJleHAiOjE3MjE0ODg0Mjh9.LhunMjl37LLaPr9aS6bQcVw3o2fCWiGmMH3n8TeLuX85CLDIw8MQye5iwZohic4qY3flHHV3RxqZlaCDi-PQHg
+@accessToken = eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJjbGllbnQxIiwiaWF0IjoxNzIxNTcwNzg1LCJleHAiOjE3MjE1Nzc5ODV9.P3M_LlMswqvbCRMOIv3-GeQI8WNSlhNcZjniqTTfTkiigASD50r7fFnpx6bkaejfQJllDgbHRZGVpJ4HZr-evA
 
 # 잔액 사용 및 중복 거래 테스트
 ### use balance1
@@ -12,11 +12,11 @@ Authorization: Bearer {{accessToken}}
 {
   "memberId": 1,
   "accountNumber": "1234-1111",
-  "amount": 100
+  "amount": 500
 }
 
 ### use balance2
-POST http://localhost:8080/transaction/use
+POST http://localhost:8080/api/v1/transaction/use
 Content-Type: application/json
 Authorization: Bearer {{accessToken}}
 
@@ -27,24 +27,25 @@ Authorization: Bearer {{accessToken}}
 }
 
 ### use balance3
-POST http://localhost:8080/transaction/use
+POST http://localhost:8080/api/v1/transaction/use
 Content-Type: application/json
 Authorization: Bearer {{accessToken}}
 
 {
   "memberId": 1,
   "accountNumber": "1234-1111",
-  "amount": 30
+  "amount": 3000
 }
 
 ### cancel balance
-POST http://localhost:8080/transaction/cancel
+POST http://localhost:8080/api/v1/transaction/cancel
 Content-Type: application/json
+Authorization: Bearer {{accessToken}}
 
 {
-  "transactionId": "6798598a387c4e76bad008161798f048",
-  "accountNumber": "1000000000",
-  "amount": 3
+  "transactionId": "1dfdfc47c6f54595ab52601e2eff5ce5",
+  "accountNumber": "1234-1111",
+  "amount": 2000
 }
 
 ### query transaction

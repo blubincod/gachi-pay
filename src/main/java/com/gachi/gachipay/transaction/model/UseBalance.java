@@ -19,6 +19,8 @@ public class UseBalance {
         @NotNull
         private Long memberId;
 
+        private Long teamId;
+
         @NotBlank
         private String accountNumber;
 

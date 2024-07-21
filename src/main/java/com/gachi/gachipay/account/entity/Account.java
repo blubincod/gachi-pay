@@ -3,6 +3,7 @@ package com.gachi.gachipay.account.entity;
 import com.gachi.gachipay.common.exception.AccountException;
 import com.gachi.gachipay.common.exception.ErrorCode;
 import com.gachi.gachipay.member.entity.Member;
+import com.gachi.gachipay.team.entity.Team;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -25,6 +26,11 @@ public class Account {
 
     @ManyToOne
     private Member member; // 사용자
+
+    @ManyToOne
+    private Team team; // 그룹 (대표 계좌인 경우에만 설정)
+
+    private boolean isRepresentativeAccount; // 대표 계좌 여부
 
     @NotBlank
     private String accountNumber; // 계좌번호

@@ -59,20 +59,22 @@ public class TransactionService {
      * 3. 잔액 부족 확인
      */
     private void validateUseBalance(Member member, Account account, Long amount) {
+        // 계좌 소유자 일치 확인
         if (member.getId() != account.getMember().getId()) {
             throw new AccountException(
-                    ErrorCode.USER_ACCOUNT_UN_MATCH,
-                    ErrorCode.USER_ACCOUNT_UN_MATCH.getDescription());
+                    ErrorCode.USER_ACCOUNT_UN_MATCH);
         }
+
+        // 계좌 상태 확인
         if (account.getStatus() != AccountStatus.IN_USE) {
             throw new AccountException(
-                    ErrorCode.ACCOUNT_ALREADY_UNREGISTERED,
-                    ErrorCode.ACCOUNT_ALREADY_UNREGISTERED.getDescription());
+                    ErrorCode.ACCOUNT_ALREADY_UNREGISTERED);
         }
+
+        // 잔액 부족 확인
         if (account.getBalance() < amount) {
             throw new AccountException(
-                    ErrorCode.LACK_BALANCE,
-                    ErrorCode.LACK_BALANCE.getDescription());
+                    ErrorCode.LACK_BALANCE);
         }
     }
 
@@ -114,19 +116,15 @@ public class TransactionService {
     private void validateCancelBalance(Transaction transaction, Account account, Long amount) {
         if (transaction.getAccount().getId() != account.getMember().getId()) {
             throw new AccountException(
-                    ErrorCode.TRANSACTION_ACCOUNT_UN_MATCH,
-                    ErrorCode.TRANSACTION_ACCOUNT_UN_MATCH.getDescription());
+                    ErrorCode.TRANSACTION_ACCOUNT_MISMATCH);
         }
-        if (transaction.getAmount() != amount) {
+        if (!transaction.getAmount().equals(amount)) {
             throw new AccountException(
-                    ErrorCode.CANCEL_MUST_FULLY,
-                    ErrorCode.CANCEL_MUST_FULLY.getDescription());
+                    ErrorCode.CANCEL_AMOUNT_MISMATCH);
         }
-        if (!transaction.getTransactedAt().isBefore(LocalDateTime.now().minusMonths(6))) {
+        if (transaction.getTransactedAt().isBefore(LocalDateTime.now().minusMonths(6))) {
             throw new AccountException(
-                    ErrorCode.TOO_OLD_ORDER_TO_CANCEL,
-                    ErrorCode.TOO_OLD_ORDER_TO_CANCEL.getDescription()
-            );
+                    ErrorCode.TOO_OLD_ORDER_TO_CANCEL);
         }
     }
 
@@ -159,20 +157,19 @@ public class TransactionService {
         );
     }
 
-    // 거래 관련 Query
+    /**
+     * 거래 정보 조회
+     */
     public TransactionDto queryTransaction(String transactionId) {
-
         return TransactionDto.fromEntity(transactionRepository.findByTransactionId(transactionId)
                 .orElseThrow(() -> new AccountException(
-                        ErrorCode.TRANSACTION_NOT_FOUND,
-                        ErrorCode.TRANSACTION_NOT_FOUND.getDescription())));
+                        ErrorCode.TRANSACTION_NOT_FOUND)));
     }
 
-    // 계좌 정보 가져오기
+    // 계좌 정보 조회
     private Account getAccount(String accountNumber) {
-        Account account = accountRepository.findByAccountNumber(accountNumber)
+        return accountRepository.findByAccountNumber(accountNumber)
                 .orElseThrow(() -> new AccountException(
                         ErrorCode.ACCOUNT_NOT_FOUND));
-        return account;
     }
 }

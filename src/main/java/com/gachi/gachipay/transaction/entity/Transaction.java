@@ -1,6 +1,7 @@
 package com.gachi.gachipay.transaction.entity;
 
 import com.gachi.gachipay.account.entity.Account;
+import com.gachi.gachipay.team.entity.Team;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -27,10 +28,13 @@ public class Transaction {
     @Enumerated(EnumType.STRING)
     private TransactionType transactionType; // 거래 유형
     @Enumerated(EnumType.STRING)
-    private TransactionResultType transactionResult;
+    private TransactionResultType transactionResult; // 거래 결과
 
     @ManyToOne
-    private Account account;
+    private Account account; // 계좌 정보
+
+    @ManyToOne
+    private Team team; // 그룹 정보
 
     private Long amount; // 거래 금액
     private Long paidAmount; // 결제된 금액
