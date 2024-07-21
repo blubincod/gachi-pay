@@ -4,15 +4,19 @@ import com.gachi.gachipay.account.entity.Account;
 import com.gachi.gachipay.account.repository.AccountRepository;
 import com.gachi.gachipay.common.exception.AccountException;
 import com.gachi.gachipay.common.exception.ErrorCode;
+import com.gachi.gachipay.common.exception.TeamException;
 import com.gachi.gachipay.member.entity.Member;
 import com.gachi.gachipay.member.repository.MemberRepository;
 import com.gachi.gachipay.team.entity.Team;
+import com.gachi.gachipay.team.entity.TeamMembership;
 import com.gachi.gachipay.team.model.CreateTeam;
 import com.gachi.gachipay.team.model.TeamDto;
+import com.gachi.gachipay.team.repository.TeamMembershipRepository;
 import com.gachi.gachipay.team.repository.TeamRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 그룹 서비스
@@ -27,6 +31,7 @@ public class TeamService {
     private final MemberRepository memberRepository;
     private final AccountRepository accountRepository;
     private final TeamRepository teamRepository;
+    private final TeamMembershipRepository teamMembershipRepository;
 
     /**
      * 그룹 생성
@@ -77,21 +82,46 @@ public class TeamService {
 
     /**
      * 그룹 가입
+     * 등록된 계좌가 하나 이상 존재 시 가입 가능
      */
-    public void joinTeam() {
+    public TeamMembership joinTeam(Long teamId, Long memberId) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new AccountException(ErrorCode.USER_NOT_FOUND));
 
+        Team team = teamRepository.findById(teamId)
+                .orElseThrow(() -> new RuntimeException("TEAM NOT FOUND")); //FIXME
+
+        return teamMembershipRepository.save(team.addMember(member));
     }
 
     /**
      * 그룹 탈퇴
+     * 대표자는 탈퇴가 불가능
      */
-    public void withdrawTeam() {
+    @Transactional
+    public void withdrawTeam(Long teamId, Long memberId) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new AccountException(ErrorCode.USER_NOT_FOUND));
 
+        Team team = teamRepository.findById(teamId)
+                .orElseThrow(() -> new TeamException(ErrorCode.TEAM_NOT_FOUND));
+
+        // 그룹에 해당 멤버가 있는지 확인
+        boolean isMember = teamMembershipRepository.existsByTeamAndMember(team, member);
+        if (!isMember) {
+            throw new TeamException(ErrorCode.NOT_TEAM_MEMBER);
+        }
+
+        // 대표자인 경우 탈퇴 불가
+        if (team.getRepresentativeId().equals(memberId)) {
+            throw new TeamException(ErrorCode.REPRESENTATIVE_CANNOT_LEAVE);
+        }
+
+        teamMembershipRepository.deleteByTeamIdAndMemberId(teamId, memberId);
     }
 
     /**
      * 자동 회비 납부
-     *
      */
 
     // 계좌 정보 가져오기

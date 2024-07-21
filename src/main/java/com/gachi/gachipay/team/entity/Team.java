@@ -1,5 +1,6 @@
 package com.gachi.gachipay.team.entity;
 
+import com.gachi.gachipay.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -47,4 +48,16 @@ public class Team {
     private LocalDateTime createdAt;
     @LastModifiedDate
     private LocalDateTime updatedAt;
+
+    public TeamMembership addMember(Member member) {
+        TeamMembership teamMembership = new TeamMembership();
+        teamMembership.setTeam(this);
+        teamMembership.setMember(member);
+        teamMembership.setJoinedAt(LocalDateTime.now());
+
+        teamMemberships.add(teamMembership);
+        member.getTeamMemberships().add(teamMembership);
+
+        return teamMembership;
+    }
 }

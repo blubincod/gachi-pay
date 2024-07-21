@@ -43,33 +43,39 @@ public class TeamController {
     /**
      * 그룹 삭제
      */
-    @DeleteMapping("/{teamId}")
-    public ResponseEntity<?> deleteTeam(
-            @PathVariable Long teamId,
-            @RequestParam("member_id") Long memberId
-    ) {
-        teamService.deleteTeam(teamId, memberId);
-
-        return ResponseEntity.ok("Deleted");
-    }
+//    @DeleteMapping("/{teamId}")
+//    public ResponseEntity<?> deleteTeam(
+//            @PathVariable Long teamId,
+//            @RequestParam("member_id") Long memberId
+//    ) {
+//        teamService.deleteTeam(teamId, memberId);
+//
+//        return ResponseEntity.ok("Deleted");
+//    }
 
     /**
      * 그룹 가입
      */
-    @PostMapping("/join")
-    public void joinTeam(
+    @PostMapping("/{teamId}/members")
+    public ResponseEntity<?> joinTeam(
+            @PathVariable Long teamId,
             @RequestParam("member_id") Long memberId
     ) {
+        teamService.joinTeam(teamId, memberId);
 
+        return ResponseEntity.ok("Joined");
     }
 
     /**
      * 그룹 탈퇴
      */
-    @DeleteMapping("/withdraw")
-    public void withdrawTeam(
-            @RequestParam("member_id") Long memberId
+    @DeleteMapping("/{teamId}/members/{memberId}")
+    public ResponseEntity<?> withdrawTeam(
+            @PathVariable Long teamId,
+            @PathVariable Long memberId
     ) {
+        teamService.withdrawTeam(teamId, memberId);
 
+        return ResponseEntity.noContent().build();
     }
 }
