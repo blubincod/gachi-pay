@@ -15,7 +15,7 @@ public class RedisTestService {
     private final RedissonClient redissonClient;
 
     /**
-     * Lock 받급
+     * Lock 취득 테스트
      * 최대 3초의 시간이 지나면 Lock 해제
      */
     public String getLock() {

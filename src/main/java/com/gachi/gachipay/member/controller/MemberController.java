@@ -1,13 +1,13 @@
 package com.gachi.gachipay.member.controller;
 
+import com.gachi.gachipay.member.service.MemberService;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
+@AllArgsConstructor
+@RequestMapping("/api/v1/member")
 public class MemberController {
-
-    @PostMapping("/member/test")
-    public void getMember() {
-        System.out.println();
-    }
+    private final MemberService memberService;
 }

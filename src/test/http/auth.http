@@ -1,4 +1,4 @@
-# 인증 테스트
+# Auth 테스트
 ### get accessToken
 POST http://localhost:8080/auth/signin
 Content-Type: application/json
@@ -7,3 +7,26 @@ Content-Type: application/json
   "username" : "client1",
   "password" : "123"
 }
+
+### signup client1
+POST http://localhost:8080/auth/signup
+Content-Type: application/json
+
+{
+  "username" : "client1",
+  "password" : "123",
+  "phoneNumber" : "12346789"
+}
+
+### signup client2
+POST http://localhost:8080/auth/signup
+Content-Type: application/json
+
+{
+  "username" : "client2",
+  "password" : "123",
+  "phoneNumber" : "22346789"
+}
+
+
+

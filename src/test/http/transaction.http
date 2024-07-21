@@ -1,17 +1,18 @@
-# 거래 테스트
-# client1 accessToken
-@accessToken = eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJjbGllbnQxIiwiaWF0IjoxNzIxMzQzNTA1LCJleHAiOjE3MjEzNTA3MDV9.WSbguR0e_FZ1GGxLAv83CmnExGLQvuGIe7dcwO-N2kmB2C8D4rGIWt25VJ6Z9E_91N8EfzCW15gmAvxzGBTp5g
+# Transaction 테스트
+
+### AccessToken
+@accessToken = eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJjbGllbnQxIiwiaWF0IjoxNzIxNDgxMjI4LCJleHAiOjE3MjE0ODg0Mjh9.LhunMjl37LLaPr9aS6bQcVw3o2fCWiGmMH3n8TeLuX85CLDIw8MQye5iwZohic4qY3flHHV3RxqZlaCDi-PQHg
 
 # 잔액 사용 및 중복 거래 테스트
 ### use balance1
-POST http://localhost:8080/transaction/use
+POST http://localhost:8080/api/v1/transaction/use
 Content-Type: application/json
 Authorization: Bearer {{accessToken}}
 
 {
-  "userId": 1,
+  "memberId": 1,
   "accountNumber": "1234-1111",
-  "amount": 10
+  "amount": 100
 }
 
 ### use balance2
@@ -20,7 +21,7 @@ Content-Type: application/json
 Authorization: Bearer {{accessToken}}
 
 {
-  "userId": 1,
+  "memberId": 1,
   "accountNumber": "1234-1111",
   "amount": 20
 }
@@ -31,7 +32,7 @@ Content-Type: application/json
 Authorization: Bearer {{accessToken}}
 
 {
-  "userId": 1,
+  "memberId": 1,
   "accountNumber": "1234-1111",
   "amount": 30
 }

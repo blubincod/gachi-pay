@@ -18,14 +18,15 @@ import org.springframework.web.bind.annotation.*;
  * 3. 거래 확인
  */
 @Slf4j
-@RequiredArgsConstructor
 @RestController
+@RequiredArgsConstructor
+@RequestMapping("/api/v1/transaction")
 public class TransactionController {
     private final TransactionService transactionService;
 
     // 잔액 사용
     @AccountLock
-    @PostMapping("/transaction/use")
+    @PostMapping("/use")
     public UseBalance.Response useBalance(
             @RequestBody @Valid UseBalance.Request request
     ) throws InterruptedException {
@@ -33,7 +34,7 @@ public class TransactionController {
             Thread.sleep(3000L);
             return UseBalance.Response.from(
                     transactionService.useBalance(
-                            request.getUserId(),
+                            request.getMemberId(),
                             request.getAccountNumber(),
                             request.getAmount()));
         } catch (AccountException e) {
@@ -50,7 +51,7 @@ public class TransactionController {
 
     // 잔액 사용 취소
     @AccountLock
-    @PostMapping("/transaction/cancel")
+    @PostMapping("/cancel")
     public CancelBalance.Response cancelBalance(
             @RequestBody @Valid CancelBalance.Request request
     ) {
@@ -73,7 +74,7 @@ public class TransactionController {
     }
 
     // 거래 관련 Query
-    @GetMapping("/transaction/{transactionId}")
+    @GetMapping("/{transactionId}")
     public QueryTransactionResponse queryTransactionResponse(
             @PathVariable String transactionId
     ) {

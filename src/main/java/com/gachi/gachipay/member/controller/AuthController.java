@@ -2,7 +2,7 @@ package com.gachi.gachipay.member.controller;
 
 import com.gachi.gachipay.common.security.TokenProvider;
 import com.gachi.gachipay.member.model.Auth;
-import com.gachi.gachipay.member.service.MemberService;
+import com.gachi.gachipay.member.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -19,17 +19,17 @@ public class AuthController {
 
     private final TokenProvider tokenProvider;
 
-    private final MemberService memberService;
+    private final AuthService authService;
 
     @PostMapping("/signup")
     public ResponseEntity<?> signup(@RequestBody Auth.SignUp request) {
-        var result = this.memberService.register(request);
+        var result = this.authService.register(request);
         return ResponseEntity.ok(result);
     }
 
     @PostMapping("/signin")
     public ResponseEntity<?> signin(@RequestBody Auth.SignIn request) {
-        var member = this.memberService.authenticate(request);
+        var member = this.authService.authenticate(request);
 
         var token = this.tokenProvider.generateToken(member.getUsername());
 
