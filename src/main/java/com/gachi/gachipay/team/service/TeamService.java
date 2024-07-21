@@ -39,12 +39,12 @@ public class TeamService {
     /**
      * 그룹 생성
      */
-    public Team createTeam(
+    public CreateTeam.Response createTeam(
             CreateTeam.Request request
     ) {
         Member member = getMember(request.getMemberId());
 
-        return teamRepository.save(
+        Team team = teamRepository.save(
                 Team.builder()
                         .representativeId(member.getId())
                         .teamName(request.getTeamName())
@@ -52,6 +52,10 @@ public class TeamService {
                         .maxMembers(request.getMaxMembers())
                         .monthlyFee(request.getMonthlyFee())
                         .build());
+
+        TeamDto teamDto = TeamDto.fromEntity(team);
+
+        return CreateTeam.Response.fromDto(teamDto);
     }
 
     /**
@@ -132,23 +136,23 @@ public class TeamService {
     }
 
     /**
-     * 자동 회비 납부
+     * TODO 자동 회비 납부
      */
+    private void collectMonthlyFee() {
+
+    }
 
     // 회원 정보 가져오기
     private Member getMember(Long memberId) {
-        Member member = memberRepository.findById(memberId)
+        return memberRepository.findById(memberId)
                 .orElseThrow(() -> new AccountException(ErrorCode.USER_NOT_FOUND));
-        return member;
     }
 
     // 계좌 정보 가져오기
     private Account getAccount(String accountNumber) {
-        System.out.println(accountNumber);
-        Account account = accountRepository.findByAccountNumber(accountNumber)
+        return accountRepository.findByAccountNumber(accountNumber)
                 .orElseThrow(() -> new AccountException(
                         ErrorCode.ACCOUNT_NOT_FOUND));
-        return account;
     }
 
     // 그룹 정보 가져오기

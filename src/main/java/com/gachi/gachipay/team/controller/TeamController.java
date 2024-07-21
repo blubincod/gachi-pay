@@ -1,5 +1,6 @@
 package com.gachi.gachipay.team.controller;
 
+import com.gachi.gachipay.team.entity.TeamMembership;
 import com.gachi.gachipay.team.model.CreateTeam;
 import com.gachi.gachipay.team.model.TeamDto;
 import com.gachi.gachipay.team.service.TeamService;
@@ -8,7 +9,9 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 @Slf4j
@@ -22,12 +25,18 @@ public class TeamController {
      * 그룹 생성
      */
     @PostMapping
-    public ResponseEntity<?> createTeam(
+    public ResponseEntity<CreateTeam.Response> createTeam(
             @RequestBody @Valid CreateTeam.Request request
     ) {
-        teamService.createTeam(request);
+        CreateTeam.Response response = teamService.createTeam(request);
 
-        return ResponseEntity.ok("Created");
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(response.getTeamId())
+                .toUri();
+
+        return ResponseEntity.created(location).body(response);
     }
 
     /**
@@ -56,27 +65,27 @@ public class TeamController {
     /**
      * 그룹 삭제
      */
-    @DeleteMapping("/{teamId}")
+    @DeleteMapping("/{teamId}/members")
     public ResponseEntity<?> deleteTeam(
             @PathVariable Long teamId,
             @RequestParam("member_id") Long memberId
     ) {
         teamService.deleteTeam(teamId, memberId);
 
-        return ResponseEntity.ok("Deleted");
+        return ResponseEntity.noContent().build();
     }
 
     /**
      * 그룹 가입
      */
     @PostMapping("/{teamId}/members")
-    public ResponseEntity<?> joinTeam(
+    public ResponseEntity<TeamMembership> joinTeam(
             @PathVariable Long teamId,
             @RequestParam("member_id") Long memberId
     ) {
-        teamService.joinTeam(teamId, memberId);
+        TeamMembership teamMembership = teamService.joinTeam(teamId, memberId);
 
-        return ResponseEntity.ok("Joined");
+        return ResponseEntity.ok(teamMembership);
     }
 
     /**
