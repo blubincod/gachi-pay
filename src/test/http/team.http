@@ -1,7 +1,7 @@
 # Team 테스트
 
 ### AccessToken
-@accessToken = eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJjbGllbnQxIiwiaWF0IjoxNzIxNTI4MTgwLCJleHAiOjE3MjE1MzUzODB9.sCrS3kcUHWH90Ed7CowBMLxHf05Lr26jwo3iCS2TUH6jnEj67ijhpa_VjirXQyQL4_POPCBTa61R24SSodXNQA
+@accessToken = eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJjbGllbnQxIiwiaWF0IjoxNzIxNTM5NjE3LCJleHAiOjE3MjE1NDY4MTd9.ymtNVJiLvOXPL3Zg7suOT3HVYhnBkBiq-2XxP2YnxzysnKtvTSYfkkB9i5zHwgF0v57qo6y_FBzuF36kOONFpw
 
 ### craete team
 POST http://localhost:8080/api/v1/team
@@ -10,20 +10,25 @@ Authorization: Bearer {{accessToken}}
 
 {
   "memberId": 1,
-  "accountNumber": "1234-1111",
-  "teamName": "풋살 모임",
-  "description": "함꼐 풋살 하실 분!!",
-  "maxMembers": 10,
-  "monthlyFee": 1000
+  "accountNumber": "1234-2222",
+  "teamName": "등산 모임",
+  "description": "산을 사랑하는 모임",
+  "maxMembers": 8,
+  "monthlyFee": 15000
 }
 
 ### delete team
-DELETE http://localhost:8080/api/v1/team/1?member_id=1
+DELETE http://localhost:8080/api/v1/team/1/members?member_id=1
 Content-Type: application/json
 Authorization: Bearer {{accessToken}}
 
 ### get team information
-GET http://localhost:8080/api/v1/team/2
+GET http://localhost:8080/api/v1/team/4
+Content-Type: application/json
+Authorization: Bearer {{accessToken}}
+
+### get teams
+GET http://localhost:8080/api/v1/team
 Content-Type: application/json
 Authorization: Bearer {{accessToken}}
 

@@ -63,7 +63,7 @@ public class AccountService {
     /**
      * 계좌 목록 조회
      */
-    public List<AccountDto> getAccountsByMemberId(Long memberId) {
+    public List<AccountDto> getAccounts(Long memberId) {
         // 회원 존재 여부 및 정보 가져오기
         Member member = getMember(memberId);
 

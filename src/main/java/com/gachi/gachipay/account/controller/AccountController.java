@@ -45,10 +45,10 @@ public class AccountController {
      * 계좌 정보 조회
      */
     @GetMapping
-    public ResponseEntity<List<AccountDto>> getAccountsByMemberId(
+    public ResponseEntity<List<AccountDto>> getAccounts(
             @RequestParam("member_id") Long memberId
     ) {
-        List<AccountDto> accounts = accountService.getAccountsByMemberId(memberId);
+        List<AccountDto> accounts = accountService.getAccounts(memberId);
 
         return ResponseEntity.ok(accounts);
     }

@@ -9,6 +9,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Slf4j
 @RestController
 @AllArgsConstructor
@@ -32,7 +34,7 @@ public class TeamController {
      * 그룹 정보 조회
      */
     @GetMapping("/{teamId}")
-    public ResponseEntity<?> getTeamInfo(
+    public ResponseEntity<TeamDto> getTeamInfo(
             @PathVariable Long teamId
     ) {
         TeamDto teamInfo = teamService.getTeamInfo(teamId);
@@ -41,17 +43,28 @@ public class TeamController {
     }
 
     /**
+     * 그룹 목록 조회
+     */
+    @GetMapping
+    public ResponseEntity<List<TeamDto>> getTeams(
+    ) {
+        List<TeamDto> teams = teamService.getTeams();
+
+        return ResponseEntity.ok(teams);
+    }
+
+    /**
      * 그룹 삭제
      */
-//    @DeleteMapping("/{teamId}")
-//    public ResponseEntity<?> deleteTeam(
-//            @PathVariable Long teamId,
-//            @RequestParam("member_id") Long memberId
-//    ) {
-//        teamService.deleteTeam(teamId, memberId);
-//
-//        return ResponseEntity.ok("Deleted");
-//    }
+    @DeleteMapping("/{teamId}")
+    public ResponseEntity<?> deleteTeam(
+            @PathVariable Long teamId,
+            @RequestParam("member_id") Long memberId
+    ) {
+        teamService.deleteTeam(teamId, memberId);
+
+        return ResponseEntity.ok("Deleted");
+    }
 
     /**
      * 그룹 가입

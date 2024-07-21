@@ -18,6 +18,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * 그룹 서비스
  * 그룹 생성 및 삭제
@@ -39,8 +42,7 @@ public class TeamService {
     public Team createTeam(
             CreateTeam.Request request
     ) {
-        Member member = memberRepository.findById(request.getMemberId())
-                .orElseThrow(() -> new AccountException(ErrorCode.USER_NOT_FOUND));
+        Member member = getMember(request.getMemberId());
 
         return teamRepository.save(
                 Team.builder()
@@ -62,7 +64,7 @@ public class TeamService {
 
         // 그룹의 대표 여부 확인
         if (team.getRepresentativeId() != memberId) {
-            throw new RuntimeException("그룹 삭제 권한은 그룹 대표에게만 있습니다.");
+            throw new TeamException(ErrorCode.REPRESENTATIVE_ONLY_DELETE_TEAM);
         }
 
         // TODO 잔액이 남아 있다면 잔액 분배
@@ -81,30 +83,39 @@ public class TeamService {
     }
 
     /**
+     * 그룹 목록 조회
+     */
+    public List<TeamDto> getTeams() {
+
+        List<Team> teams = teamRepository.findAll();
+
+        return teams.stream()
+                .map(TeamDto::fromEntity)
+                .collect(Collectors.toList());
+    }
+
+    /**
      * 그룹 가입
      * 등록된 계좌가 하나 이상 존재 시 가입 가능
      */
     public TeamMembership joinTeam(Long teamId, Long memberId) {
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new AccountException(ErrorCode.USER_NOT_FOUND));
+        Member member = getMember(memberId);
 
-        Team team = teamRepository.findById(teamId)
-                .orElseThrow(() -> new RuntimeException("TEAM NOT FOUND")); //FIXME
+        Team team = getTeam(teamId);
 
         return teamMembershipRepository.save(team.addMember(member));
     }
 
+
     /**
      * 그룹 탈퇴
-     * 대표자는 탈퇴가 불가능
+     * 해당 그룹의 대표는 탈퇴 불가
      */
     @Transactional
     public void withdrawTeam(Long teamId, Long memberId) {
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new AccountException(ErrorCode.USER_NOT_FOUND));
+        Member member = getMember(memberId);
 
-        Team team = teamRepository.findById(teamId)
-                .orElseThrow(() -> new TeamException(ErrorCode.TEAM_NOT_FOUND));
+        Team team = getTeam(teamId);
 
         // 그룹에 해당 멤버가 있는지 확인
         boolean isMember = teamMembershipRepository.existsByTeamAndMember(team, member);
@@ -124,6 +135,13 @@ public class TeamService {
      * 자동 회비 납부
      */
 
+    // 회원 정보 가져오기
+    private Member getMember(Long memberId) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new AccountException(ErrorCode.USER_NOT_FOUND));
+        return member;
+    }
+
     // 계좌 정보 가져오기
     private Account getAccount(String accountNumber) {
         System.out.println(accountNumber);
@@ -136,6 +154,8 @@ public class TeamService {
     // 그룹 정보 가져오기
     private Team getTeam(Long teamId) {
         return teamRepository.findById(teamId)
-                .orElseThrow(() -> new RuntimeException("존재하지 않는 그룹입니다."));
+                .orElseThrow(() -> new TeamException(ErrorCode.TEAM_NOT_FOUND));
     }
+
+
 }
