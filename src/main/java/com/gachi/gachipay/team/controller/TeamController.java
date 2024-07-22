@@ -2,6 +2,7 @@ package com.gachi.gachipay.team.controller;
 
 import com.gachi.gachipay.team.entity.TeamMembership;
 import com.gachi.gachipay.team.model.CreateTeam;
+import com.gachi.gachipay.team.model.JoinTeam;
 import com.gachi.gachipay.team.model.TeamDto;
 import com.gachi.gachipay.team.service.TeamService;
 import jakarta.validation.Valid;
@@ -65,7 +66,7 @@ public class TeamController {
     /**
      * 그룹 삭제
      */
-    @DeleteMapping("/{teamId}/members")
+    @DeleteMapping("/{teamId}/member")
     public ResponseEntity<?> deleteTeam(
             @PathVariable Long teamId,
             @RequestParam("member_id") Long memberId,
@@ -79,12 +80,15 @@ public class TeamController {
     /**
      * 그룹 가입
      */
-    @PostMapping("/{teamId}/members")
+    @PostMapping("/{teamId}")
     public ResponseEntity<TeamMembership> joinTeam(
             @PathVariable Long teamId,
-            @RequestParam("member_id") Long memberId
+            @RequestBody @Valid JoinTeam.Request request
     ) {
-        TeamMembership teamMembership = teamService.joinTeam(teamId, memberId);
+        TeamMembership teamMembership = teamService.joinTeam(
+                teamId,
+                request.getMemberId(),
+                request.getAccountNumber());
 
         return ResponseEntity.ok(teamMembership);
     }
@@ -92,7 +96,7 @@ public class TeamController {
     /**
      * 그룹 탈퇴
      */
-    @DeleteMapping("/{teamId}/members/{memberId}")
+    @DeleteMapping("/{teamId}/member/{memberId}")
     public ResponseEntity<?> withdrawTeam(
             @PathVariable Long teamId,
             @PathVariable Long memberId

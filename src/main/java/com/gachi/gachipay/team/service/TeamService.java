@@ -69,6 +69,7 @@ public class TeamService {
 
         // 그룹 생성 시 Membership에 대표 회원으로 추가
         TeamMembership membership = team.addMember(member);
+        membership.setAccount(account);
         membership.setRole(TeamMemberRole.REPRESENTATIVE);
         membership.setStatus(TeamMemberStatus.ACTIVE);
         teamMembershipRepository.save(membership);
@@ -81,7 +82,7 @@ public class TeamService {
     /**
      * 그룹 삭제
      * 그룹의 대표만 삭제 가능
-     * 삭제 시 돈이 남아 있다면 자동 분배(10원 단위)
+     * // TODO 잔액이 남아 있다면 잔액 분배 (10원 단위)
      */
     public void deleteTeam(Long teamId, Long memberId, String accountNumber) {
         Team team = getTeam(teamId);
@@ -98,14 +99,11 @@ public class TeamService {
         account.setTeam(null);
         accountRepository.save(account);
 
-        // TODO 잔액이 남아 있다면 잔액 분배
-
         teamRepository.deleteById(teamId);
     }
 
     /**
      * 그룹 정보 확인
-     * TODO 페이지네이션
      */
     public TeamDto getTeamInfo(Long teamId) {
         Team team = getTeam(teamId);
@@ -115,6 +113,7 @@ public class TeamService {
 
     /**
      * 그룹 목록 조회
+     * TODO 페이지네이션
      */
     public List<TeamDto> getTeams() {
 
@@ -127,15 +126,19 @@ public class TeamService {
 
     /**
      * 그룹 가입
+     * 대표자는 자신이 생성한 그룹 가입 불가
      * 등록된 계좌가 하나 이상 존재 시 가입 가능
      */
-    public TeamMembership joinTeam(Long teamId, Long memberId) {
+    public TeamMembership joinTeam(Long teamId, Long memberId, String accountNumber) {
         Member member = getMember(memberId);
 
         Team team = getTeam(teamId);
 
+        Account account = getAccount(accountNumber);
+
         TeamMembership teamMembership = team.addMember(member);
 
+        teamMembership.setAccount(account);
         teamMembership.setRole(TeamMemberRole.MEMBER);
         teamMembership.setStatus(TeamMemberStatus.ACTIVE);
 
@@ -169,31 +172,22 @@ public class TeamService {
         teamMembershipRepository.save(teamMembership);
     }
 
-    /**
-     * TODO 자동 회비 납부
-     */
-    private void collectMonthlyFee() {
-
-    }
-
     // 회원 정보 가져오기
-    private Member getMember(Long memberId) {
+    public Member getMember(Long memberId) {
         return memberRepository.findById(memberId)
                 .orElseThrow(() -> new AccountException(ErrorCode.USER_NOT_FOUND));
     }
 
     // 계좌 정보 가져오기
-    private Account getAccount(String accountNumber) {
+    public Account getAccount(String accountNumber) {
         return accountRepository.findByAccountNumber(accountNumber)
                 .orElseThrow(() -> new AccountException(
                         ErrorCode.ACCOUNT_NOT_FOUND));
     }
 
     // 그룹 정보 가져오기
-    private Team getTeam(Long teamId) {
+    public Team getTeam(Long teamId) {
         return teamRepository.findById(teamId)
                 .orElseThrow(() -> new TeamException(ErrorCode.TEAM_NOT_FOUND));
     }
-
-
 }

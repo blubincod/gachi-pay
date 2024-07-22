@@ -2,9 +2,11 @@ package com.gachi.gachipay.team.repository;
 
 import com.gachi.gachipay.member.entity.Member;
 import com.gachi.gachipay.team.entity.Team;
+import com.gachi.gachipay.team.entity.TeamMemberStatus;
 import com.gachi.gachipay.team.entity.TeamMembership;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface TeamMembershipRepository extends JpaRepository<TeamMembership, Long> {
@@ -19,5 +21,13 @@ public interface TeamMembershipRepository extends JpaRepository<TeamMembership, 
      */
     void deleteByTeamIdAndMemberId(Long teamId, Long memberId);
 
+    /**
+     * 그룹에 속한 멤버 찾기
+     */
     Optional<TeamMembership> findByMemberIdAndTeamId(Long memberId, Long teamId);
+
+    /**
+     * 활성화 중인 그룹의 멤버 찾기
+     */
+    List<TeamMembership> findByTeamIdAndStatus(Long teamId, TeamMemberStatus status);
 }

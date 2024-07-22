@@ -205,7 +205,7 @@ public class TransactionService {
      * 5. 잔액으로 거래 금액을 처리 가능한지 확인
      */
     private void validateUseTeamBalance(Team team, Long memberId, Account account, Long amount) {
-        TeamMembership membership =  teamMembershipRepository.findByMemberIdAndTeamId(memberId, team.getId())
+        TeamMembership membership = teamMembershipRepository.findByMemberIdAndTeamId(memberId, team.getId())
                 .orElseThrow(() -> new TeamException(ErrorCode.NOT_TEAM_MEMBER));
 
         if (membership.getStatus() != TeamMemberStatus.ACTIVE) {

@@ -1,16 +1,16 @@
 # Account 테스트
 
 ### AccessToken
-@accessToken = eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJjbGllbnQxIiwiaWF0IjoxNzIxNjEyMTEwLCJleHAiOjE3MjE2MTkzMTB9.dIE9mnxj9-E5muTj_UagVBudSOjs-QYFivSPSc2kgjAML6VR7eEFaT2-oXYdAvdViPGNdCwoLPOWr07ysDIYYw
+@accessToken = eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJjbGllbnQxIiwiaWF0IjoxNzIxNjM5ODc1LCJleHAiOjE3MjE2NDcwNzV9.1Ik37Jd-eofWioyOu7UFcoZnxBM9w2qxZL4K-8iXNL44Rlo0ti1gJNDz7i1ygWgnZUFP0GTIcXQnr-ZEItPQkg
 
 ### register account
-POST http://localhost:8080/api/v1/account?member_id=1
+POST http://localhost:8080/api/v1/account?member_id=2
 Content-Type: application/json
 Authorization: Bearer {{accessToken}}
 
 {
-  "accountNumber": "1234-2222",
-  "balance": 11112
+  "accountNumber": "2234-2222",
+  "balance": 22222
 }
 
 ### get member accounts

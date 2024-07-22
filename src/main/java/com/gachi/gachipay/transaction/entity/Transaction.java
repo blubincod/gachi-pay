@@ -39,9 +39,7 @@ public class Transaction {
     private Team team; // 그룹 정보
 
     private Long amount; // 거래 금액
-    private Long paidAmount; // 결제된 금액
-    private Long refundAmount; // 환불된 금액
-    private Long balanceSnapshot;
+    private Long balanceSnapshot; // 잔액 스냅샷
 
     private LocalDateTime transactedAt; // 거래 일시
 
