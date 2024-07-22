@@ -1,7 +1,6 @@
 package com.gachi.gachipay.transaction.model;
 
 import com.gachi.gachipay.transaction.entity.TransactionResultType;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
@@ -20,7 +19,8 @@ public class CancelTeamBalance {
 
         private Long teamId;
 
-        @NotBlank
+        private Long memberId;
+
         private String accountNumber;
 
         @NotNull
@@ -43,7 +43,8 @@ public class CancelTeamBalance {
 
         public static Response fromDto(TransactionDto transactionDto) {
             return Response.builder()
-                    .accountNumber(transactionDto.getAccountNumber())
+
+//                    .accountNumber(transactionDto.getAccountNumber())
                     .transactionId(transactionDto.getTransactionId())
                     .transactionResult(transactionDto.getTransactionResult())
                     .amount(transactionDto.getAmount())

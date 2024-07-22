@@ -141,7 +141,7 @@ public class TransactionService {
     }
 
     /**
-     * 거래 내역 저장 및 반환
+     * 개인 거래 내역 저장 및 반환
      */
     private Transaction saveAndGetTransaction(TransactionType transactionType,
                                               TransactionResultType transactionResultType,
@@ -172,23 +172,22 @@ public class TransactionService {
     /**
      * 그룹 잔액 사용
      */
-    public TransactionDto useTeamBalance(Long teamId,Long memberId, Long amount) {
+    public TransactionDto useTeamBalance(Long teamId, Long memberId, Long amount) {
         Team team = getTeam(teamId);
 
+        //FIXME 사용하지 않는 변수
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new AccountException(
                         ErrorCode.USER_NOT_FOUND));
 
-        System.out.println(teamId);
+        Account account = team.getRepresentativeAccount();
 
-        Account representativeAccount = team.getRepresentativeAccount();
+        validateUseTeamBalance(team, account, amount);
 
-        System.out.println(representativeAccount);
-        validateUseTeamBalance(team, representativeAccount, amount);
+        account.useBalance(amount);
 
-        representativeAccount.useBalance(amount);
-
-        Transaction transaction = saveAndGetTransaction(USE, SUCCESS, representativeAccount, amount);
+        Transaction transaction = saveAndGetTeamTransaction(
+                USE, SUCCESS, account, amount, memberId, team);
 
         return TransactionDto.fromEntity(transaction);
     }
@@ -214,9 +213,20 @@ public class TransactionService {
     }
 
     /**
+     * 그룹 잔액 사용 실패
+     */
+    public void saveFailedUseTeamTransaction(Long teamId, Long memberId, Long amount) {
+        Team team = getTeam(teamId);
+
+        Account account = team.getRepresentativeAccount();
+
+        saveAndGetTeamTransaction(USE, FAILURE, account, amount, memberId, team);
+    }
+
+    /**
      * 그룹 잔액 사용 취소
      */
-    public TransactionDto cancelTeamBalance(String transactionId, Long teamId, Long amount) {
+    public TransactionDto cancelTeamBalance(Long teamId, String transactionId, Long amount) {
         Transaction transaction = transactionRepository.findByTransactionId(transactionId)
                 .orElseThrow(() -> new AccountException(ErrorCode.TRANSACTION_NOT_FOUND));
 
@@ -227,7 +237,8 @@ public class TransactionService {
 
         representativeAccount.cancelBalance(amount);
 
-        Transaction cancelTransaction = saveAndGetTransaction(CANCEL, SUCCESS, representativeAccount, amount);
+        Transaction cancelTransaction = saveAndGetTeamTransaction(
+                CANCEL, SUCCESS, representativeAccount, amount, transaction.getMemberId(), team);
 
         return TransactionDto.fromEntity(cancelTransaction);
     }
@@ -245,6 +256,47 @@ public class TransactionService {
         if (transaction.getTransactedAt().isBefore(LocalDateTime.now().minusMonths(6))) {
             throw new AccountException(ErrorCode.TOO_OLD_ORDER_TO_CANCEL);
         }
+    }
+
+    /**
+     * 그룹 잔액 사용 취소 실패
+     */
+    public void saveFailedCancelTeamTransaction(Long teamId, String transactionId) {
+        Team team = getTeam(teamId);
+
+        Account account = team.getRepresentativeAccount();
+
+        Transaction transaction = transactionRepository.findByTransactionId(transactionId)
+                .orElseThrow(() -> new AccountException(ErrorCode.TRANSACTION_NOT_FOUND));
+
+        saveAndGetTeamTransaction(
+                CANCEL, FAILURE, account, transaction.getAmount(), transaction.getMemberId(), team);
+    }
+
+    /**
+     * 그룹 거래 내역 저장 및 반환
+     */
+    private Transaction saveAndGetTeamTransaction(TransactionType transactionType,
+                                                  TransactionResultType transactionResultType,
+                                                  Account account,
+                                                  Long amount,
+                                                  Long memberId,
+                                                  Team team) {
+        return transactionRepository.save(
+                Transaction.builder()
+                        .transactionId(UUID.randomUUID().toString().replace("-", ""))
+                        .transactionType(transactionType)
+                        .transactionResult(transactionResultType)
+                        .account(account)
+                        .amount(amount)
+                        .memberId(memberId)
+                        .team(team)
+                        .balanceSnapshot(account.getBalance())
+                        .transactedAt(LocalDateTime.now())
+                        .memberId(memberId)
+                        .team(team)
+                        .build()
+        );
     }
 
     // 계좌 정보 조회

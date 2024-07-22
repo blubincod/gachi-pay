@@ -14,11 +14,11 @@ import org.springframework.web.bind.annotation.*;
  * 개인(Member)
  * 1. 개인 잔액 사용
  * 2. 개인 잔액 사용 취소
- *
+ * <p>
  * 그룹(Team)
  * 1. 그룹 잔액 사용
  * 2. 그룹 잔액 사용 취소
- *
+ * <p>
  * 거래 정보 조회
  */
 @Slf4j
@@ -81,7 +81,7 @@ public class TransactionController {
     }
 
     /**
-     // 그룹 잔액 사용
+     * 그룹 잔액 사용
      */
     @AccountLock
     @PostMapping("/team/{teamId}/use")
@@ -98,8 +98,9 @@ public class TransactionController {
         } catch (AccountException e) {
             log.error("Failed to use TeamBalance");
 
-            transactionService.saveFailedUseTransaction(
-                    request.getAccountNumber(),
+            transactionService.saveFailedUseTeamTransaction(
+                    teamId,
+                    request.getMemberId(),
                     request.getAmount()
             );
 
@@ -111,22 +112,23 @@ public class TransactionController {
      * 그룹 잔액 사용 취소
      */
     @AccountLock
-    @PostMapping("/team/cancel")
+    @PostMapping("/team/{teamId}/cancel")
     public CancelTeamBalance.Response cancelTeamBalance(
-            @RequestBody @Valid CancelBalance.Request request
+            @PathVariable Long teamId,
+            @RequestBody @Valid CancelTeamBalance.Request request
     ) {
         try {
             return CancelTeamBalance.Response.fromDto(
-                    transactionService.cancelBalance(
+                    transactionService.cancelTeamBalance(
+                            teamId,
                             request.getTransactionId(),
-                            request.getAccountNumber(),
                             request.getAmount()));
         } catch (AccountException e) {
             log.error("Failed to cancel TeamBalance");
 
-            transactionService.saveFailedCancelTransaction(
-                    request.getAccountNumber(),
-                    request.getAmount()
+            transactionService.saveFailedCancelTeamTransaction(
+                    teamId,
+                    request.getTransactionId()
             );
 
             throw e;

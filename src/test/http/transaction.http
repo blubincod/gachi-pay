@@ -1,7 +1,7 @@
 # Transaction 테스트
 
 ### AccessToken
-@accessToken = eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJjbGllbnQxIiwiaWF0IjoxNzIxNjEwODcwLCJleHAiOjE3MjE2MTgwNzB9.lXqX0j1cyczRwrT-g2G5oCP14FDj-LgvJnln97J1y3dprhTCuUEQIlyVpdq3gdWcQs5xB4wFIKFLECJTEeaGiA
+@accessToken = eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJjbGllbnQxIiwiaWF0IjoxNzIxNjI2NTMzLCJleHAiOjE3MjE2MzM3MzN9.7ei_iMUkFGCQKzprgpzPth5YBvIr1_a9MUL1YqkVN-PBijMgbwz8pkhXvoX8VtaNYQ2EfRy1uEoHSA0OAZ7rOw
 
 # 개인 & 그룹 잔액 사용 및 거래 및 중복 거래 테스트
 ### MEMBER
@@ -51,25 +51,23 @@ Authorization: Bearer {{accessToken}}
 
 ### TEAM
 ### use team balance
-POST http://localhost:8080/api/v1/transaction/team/2/use
+POST http://localhost:8080/api/v1/transaction/team/12/use
 Content-Type: application/json
 Authorization: Bearer {{accessToken}}
 
 {
   "memberId": 3,
-  "amount": 2000
+  "amount": 10
 }
 
 ### cancel team balance
-POST http://localhost:8080/api/v1/transaction/team/cancel
+POST http://localhost:8080/api/v1/transaction/team/12/cancel
 Content-Type: application/json
 Authorization: Bearer {{accessToken}}
 
 {
-  "transactionId": "1dfdfc47c6f54595ab52601e2eff5ce5",
-  "teamId": 2,
-  "accountNumber": "1234-1111",
-  "amount": 2000
+  "transactionId": "9c4c25b66aa049bea24368348a6280f1",
+  "amount": 500
 }
 
 ### query transaction
