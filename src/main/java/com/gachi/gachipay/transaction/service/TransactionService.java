@@ -7,6 +7,8 @@ import com.gachi.gachipay.common.exception.AccountException;
 import com.gachi.gachipay.common.exception.ErrorCode;
 import com.gachi.gachipay.member.entity.Member;
 import com.gachi.gachipay.member.repository.MemberRepository;
+import com.gachi.gachipay.team.entity.Team;
+import com.gachi.gachipay.team.repository.TeamRepository;
 import com.gachi.gachipay.transaction.entity.Transaction;
 import com.gachi.gachipay.transaction.entity.TransactionResultType;
 import com.gachi.gachipay.transaction.entity.TransactionType;
@@ -33,6 +35,7 @@ public class TransactionService {
     private final TransactionRepository transactionRepository;
     private final MemberRepository memberRepository;
     private final AccountRepository accountRepository;
+    private final TeamRepository teamRepository;
 
     /**
      * 잔액 사용
@@ -166,10 +169,94 @@ public class TransactionService {
                         ErrorCode.TRANSACTION_NOT_FOUND)));
     }
 
+    /**
+     * 그룹 잔액 사용
+     */
+    public TransactionDto useTeamBalance(Long teamId,Long memberId, Long amount) {
+        Team team = getTeam(teamId);
+
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new AccountException(
+                        ErrorCode.USER_NOT_FOUND));
+
+        System.out.println(teamId);
+
+        Account representativeAccount = team.getRepresentativeAccount();
+
+        System.out.println(representativeAccount);
+        validateUseTeamBalance(team, representativeAccount, amount);
+
+        representativeAccount.useBalance(amount);
+
+        Transaction transaction = saveAndGetTransaction(USE, SUCCESS, representativeAccount, amount);
+
+        return TransactionDto.fromEntity(transaction);
+    }
+
+    /**
+     * 그룹 잔액 사용 유효성 검사
+     * 1. 대표 계좌 확인
+     * 2. 계좌 상태 확인
+     * 3. 잔액으로 거래 금액을 처리 가능한지 확인
+     */
+    private void validateUseTeamBalance(Team team, Account account, Long amount) {
+        if (account == null || !account.equals(team.getRepresentativeAccount())) {
+            throw new AccountException(ErrorCode.INVALID_REPRESENTATIVE_ACCOUNT);
+        }
+
+        if (account.getStatus() != AccountStatus.IN_USE) {
+            throw new AccountException(ErrorCode.ACCOUNT_ALREADY_UNREGISTERED);
+        }
+
+        if (account.getBalance() < amount) {
+            throw new AccountException(ErrorCode.LACK_BALANCE);
+        }
+    }
+
+    /**
+     * 그룹 잔액 사용 취소
+     */
+    public TransactionDto cancelTeamBalance(String transactionId, Long teamId, Long amount) {
+        Transaction transaction = transactionRepository.findByTransactionId(transactionId)
+                .orElseThrow(() -> new AccountException(ErrorCode.TRANSACTION_NOT_FOUND));
+
+        Team team = getTeam(teamId);
+        Account representativeAccount = team.getRepresentativeAccount();
+
+        validateCancelTeamBalance(transaction, team, representativeAccount, amount);
+
+        representativeAccount.cancelBalance(amount);
+
+        Transaction cancelTransaction = saveAndGetTransaction(CANCEL, SUCCESS, representativeAccount, amount);
+
+        return TransactionDto.fromEntity(cancelTransaction);
+    }
+
+    /**
+     * 그룹 잔액 사용 취소 유효성 검사
+     */
+    private void validateCancelTeamBalance(Transaction transaction, Team team, Account account, Long amount) {
+        if (!transaction.getAccount().equals(account)) {
+            throw new AccountException(ErrorCode.TRANSACTION_ACCOUNT_MISMATCH);
+        }
+        if (!transaction.getAmount().equals(amount)) {
+            throw new AccountException(ErrorCode.CANCEL_AMOUNT_MISMATCH);
+        }
+        if (transaction.getTransactedAt().isBefore(LocalDateTime.now().minusMonths(6))) {
+            throw new AccountException(ErrorCode.TOO_OLD_ORDER_TO_CANCEL);
+        }
+    }
+
     // 계좌 정보 조회
     private Account getAccount(String accountNumber) {
         return accountRepository.findByAccountNumber(accountNumber)
                 .orElseThrow(() -> new AccountException(
                         ErrorCode.ACCOUNT_NOT_FOUND));
+    }
+
+    // 팀 정보 가져오기
+    private Team getTeam(Long teamId) {
+        return teamRepository.findById(teamId)
+                .orElseThrow(() -> new AccountException(ErrorCode.TEAM_NOT_FOUND));
     }
 }

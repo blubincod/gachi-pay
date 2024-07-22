@@ -26,8 +26,10 @@ public enum ErrorCode {
     // Team
     TEAM_NOT_FOUND("해당 그룹이 존재하지 않습니다."),
     NOT_TEAM_MEMBER("그룹의 멤버가 아닙니다."),
+    REPRESENTATIVE_ACCOUNT_ALREADY_REGISTERED("이미 다른 그룹에 등록된 대표 계좌입니다, 다른 계좌를 이용해 주세요."),
     REPRESENTATIVE_CANNOT_LEAVE("대표자는 그룹을 탈퇴할 수 없습니다."),
     REPRESENTATIVE_ONLY_DELETE_TEAM("그룹 삭제 권한은 그룹 대표에게만 있습니다."),
+    INVALID_REPRESENTATIVE_ACCOUNT("유효하지 않은 대표 계좌입니다."),
     // Other
     INTERNAL_SERVER_ERROR("내부 서버 오류가 발생했습니다."),
     INVALID_REQUEST("잘못된 요청입니다.");

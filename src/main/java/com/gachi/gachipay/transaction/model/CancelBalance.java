@@ -39,7 +39,7 @@ public class CancelBalance {
         private Long refund_amount; // 환불된 금액
         private LocalDateTime transactedAt; // 거래 일시
 
-        public static Response from(TransactionDto transactionDto) {
+        public static Response fromDto(TransactionDto transactionDto) {
             return Response.builder()
                     .accountNumber(transactionDto.getAccountNumber())
                     .transactionId(transactionDto.getTransactionId())

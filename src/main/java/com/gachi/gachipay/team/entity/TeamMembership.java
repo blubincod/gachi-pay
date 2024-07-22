@@ -33,8 +33,8 @@ public class TeamMembership {
     @JoinColumn(name = "team_id")
     private Team team;
 
-    private String role; // 역할(대표 회원, 일반 회원)
-    private String status; // 상태(활동 중, 탈퇴)
+    private TeamMemberRole role; // 역할(대표 회원, 일반 회원)
+    private TeamMemberStatus status; // 상태(활동 중, 탈퇴)
 
     @CreatedDate
     private LocalDateTime joinedAt; // 가입 일자

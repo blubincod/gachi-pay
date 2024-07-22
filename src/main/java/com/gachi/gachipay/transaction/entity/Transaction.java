@@ -30,6 +30,8 @@ public class Transaction {
     @Enumerated(EnumType.STRING)
     private TransactionResultType transactionResult; // 거래 결과
 
+    private Long memberId; // 멤버 아이디
+
     @ManyToOne
     private Account account; // 계좌 정보
 

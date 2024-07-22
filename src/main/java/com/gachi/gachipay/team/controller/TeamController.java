@@ -68,9 +68,10 @@ public class TeamController {
     @DeleteMapping("/{teamId}/members")
     public ResponseEntity<?> deleteTeam(
             @PathVariable Long teamId,
-            @RequestParam("member_id") Long memberId
+            @RequestParam("member_id") Long memberId,
+            @RequestParam("account_number") String accountNumber
     ) {
-        teamService.deleteTeam(teamId, memberId);
+        teamService.deleteTeam(teamId, memberId, accountNumber);
 
         return ResponseEntity.noContent().build();
     }

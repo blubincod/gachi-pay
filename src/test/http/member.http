@@ -1,9 +1,9 @@
 # Member 테스트
 
 ### AccessToken
-@accessToken = eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJjbGllbnQxIiwiaWF0IjoxNzIxNDgwMjY5LCJleHAiOjE3MjE0ODc0Njl9.AsWs4Z1gPZZsoeXbJ7A26aSm-6VQYFnFT2E2WqmaG1U6K-NuJzoUMEQdtCvU-Ss7tICs54pZAvLNlrpfTl6pgg
+@accessToken = eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJjbGllbnQxIiwiaWF0IjoxNzIxNjEyMTEwLCJleHAiOjE3MjE2MTkzMTB9.dIE9mnxj9-E5muTj_UagVBudSOjs-QYFivSPSc2kgjAML6VR7eEFaT2-oXYdAvdViPGNdCwoLPOWr07ysDIYYw
 
 ### get member accounts
-GET http://localhost:8080/api/v1/account?member_id=2
+GET http://localhost:8080/api/v1/account?member_id=1
 Content-Type: application/json
 Authorization: Bearer {{accessToken}}

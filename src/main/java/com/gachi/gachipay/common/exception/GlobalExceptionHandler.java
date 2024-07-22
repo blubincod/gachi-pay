@@ -22,6 +22,15 @@ public class GlobalExceptionHandler {
         return new ErrorResponse(e.getErrorCode(), e.getErrorCode().getDescription());
     }
 
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(TeamException.class)
+    public ErrorResponse handleTeamException(TeamException e) {
+
+        log.error("{} is occurred.", e.getErrorCode());
+
+        return new ErrorResponse(e.getErrorCode(), e.getErrorCode().getDescription());
+    }
+
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ErrorResponse handleDataIntegrityViolationException(DataIntegrityViolationException e) {
         log.error("DataIntegrityViolationException is occurred.", e);

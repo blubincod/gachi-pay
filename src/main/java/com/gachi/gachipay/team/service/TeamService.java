@@ -53,6 +53,18 @@ public class TeamService {
                         .monthlyFee(request.getMonthlyFee())
                         .build());
 
+        Account account = getAccount(request.getAccountNumber());
+
+        // 이미 그룹의 대표로 등록된 계좌인지 확인
+        if (account.isRepresentativeAccount() || account.getTeam() != null) {
+            throw new TeamException(ErrorCode.REPRESENTATIVE_ACCOUNT_ALREADY_REGISTERED);
+        }
+
+        // 그룹 계좌 여부 및 생성된 team을 그룹 대표의 계좌(Account) 레코드에 설정
+        account.setRepresentativeAccount(true);
+        account.setTeam(team);
+        accountRepository.save(account);
+
         TeamDto teamDto = TeamDto.fromEntity(team);
 
         return CreateTeam.Response.fromDto(teamDto);
@@ -63,13 +75,20 @@ public class TeamService {
      * 그룹의 대표만 삭제 가능
      * 삭제 시 돈이 남아 있다면 자동 분배(10원 단위)
      */
-    public void deleteTeam(Long teamId, Long memberId) {
+    public void deleteTeam(Long teamId, Long memberId, String accountNumber) {
         Team team = getTeam(teamId);
 
         // 그룹의 대표 여부 확인
         if (team.getRepresentativeId() != memberId) {
             throw new TeamException(ErrorCode.REPRESENTATIVE_ONLY_DELETE_TEAM);
         }
+
+        Account account = getAccount(accountNumber);
+
+        // 그룹 계좌 여부 및 생성된 team을 그룹 대표의 계좌(Account) 레코드에 설정
+        account.setRepresentativeAccount(false);
+        account.setTeam(null);
+        accountRepository.save(account);
 
         // TODO 잔액이 남아 있다면 잔액 분배
 
