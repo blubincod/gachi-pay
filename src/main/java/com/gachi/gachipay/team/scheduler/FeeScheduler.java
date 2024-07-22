@@ -30,8 +30,8 @@ public class FeeScheduler {
      * 매월 15일 자정마다 회비를 걷는 스케쥴러
      * 한적한 시간인 매월 15일 새벽 2시에 실행
      */
-//    @Scheduled(cron = "0 0 2 15 * ?")
-    @Scheduled(fixedRate = 10000) // 10초 간격으로 테스트
+//    @Scheduled(fixedRate = 10000) // 10초 간격으로 테스트
+    @Scheduled(cron = "0 0 2 15 * ?")
     public void monthlyFeeScheduling() {
         LocalDate today = LocalDate.now();
         log.info("Starting Monthly fee collection check for date: {}", today);
