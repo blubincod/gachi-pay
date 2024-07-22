@@ -1,7 +1,7 @@
 # Transaction 테스트
 
 ### AccessToken
-@accessToken = eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJjbGllbnQxIiwiaWF0IjoxNzIxNjI2NTMzLCJleHAiOjE3MjE2MzM3MzN9.7ei_iMUkFGCQKzprgpzPth5YBvIr1_a9MUL1YqkVN-PBijMgbwz8pkhXvoX8VtaNYQ2EfRy1uEoHSA0OAZ7rOw
+@accessToken = eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJjbGllbnQxIiwiaWF0IjoxNzIxNjM2MDYxLCJleHAiOjE3MjE2NDMyNjF9.uZGIG8s70IHbKUJ2x1Hp2VVxZdJNkvVvXMy36sQNtVuhx4ulfU5ooDfoPIFjShODAN19Cf9OOtqsabIRnvgicw
 
 # 개인 & 그룹 잔액 사용 및 거래 및 중복 거래 테스트
 ### MEMBER
@@ -56,7 +56,7 @@ Content-Type: application/json
 Authorization: Bearer {{accessToken}}
 
 {
-  "memberId": 3,
+  "memberId": 4,
   "amount": 10
 }
 

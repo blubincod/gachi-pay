@@ -5,9 +5,13 @@ import com.gachi.gachipay.account.entity.AccountStatus;
 import com.gachi.gachipay.account.repository.AccountRepository;
 import com.gachi.gachipay.common.exception.AccountException;
 import com.gachi.gachipay.common.exception.ErrorCode;
+import com.gachi.gachipay.common.exception.TeamException;
 import com.gachi.gachipay.member.entity.Member;
 import com.gachi.gachipay.member.repository.MemberRepository;
 import com.gachi.gachipay.team.entity.Team;
+import com.gachi.gachipay.team.entity.TeamMemberStatus;
+import com.gachi.gachipay.team.entity.TeamMembership;
+import com.gachi.gachipay.team.repository.TeamMembershipRepository;
 import com.gachi.gachipay.team.repository.TeamRepository;
 import com.gachi.gachipay.transaction.entity.Transaction;
 import com.gachi.gachipay.transaction.entity.TransactionResultType;
@@ -36,6 +40,7 @@ public class TransactionService {
     private final MemberRepository memberRepository;
     private final AccountRepository accountRepository;
     private final TeamRepository teamRepository;
+    private final TeamMembershipRepository teamMembershipRepository;
 
     /**
      * 잔액 사용
@@ -114,7 +119,6 @@ public class TransactionService {
      * 1. 해당 계좌에서의 거래인지 확인
      * 2. 부분 취소는 취소 불가
      * 3. 6개월이 지난 거래 취소 불가
-     * // TODO 4. 이미 취소한 거래인지 확인
      */
     private void validateCancelBalance(Transaction transaction, Account account, Long amount) {
         if (transaction.getAccount().getId() != account.getMember().getId()) {
@@ -182,7 +186,7 @@ public class TransactionService {
 
         Account account = team.getRepresentativeAccount();
 
-        validateUseTeamBalance(team, account, amount);
+        validateUseTeamBalance(team, memberId, account, amount);
 
         account.useBalance(amount);
 
@@ -194,11 +198,20 @@ public class TransactionService {
 
     /**
      * 그룹 잔액 사용 유효성 검사
-     * 1. 대표 계좌 확인
-     * 2. 계좌 상태 확인
-     * 3. 잔액으로 거래 금액을 처리 가능한지 확인
+     * 1. 그룹의 멤버인지 확인
+     * 2. 탈퇴한 멤버인지 확인
+     * 3. 대표 계좌 확인
+     * 4. 계좌 상태 확인
+     * 5. 잔액으로 거래 금액을 처리 가능한지 확인
      */
-    private void validateUseTeamBalance(Team team, Account account, Long amount) {
+    private void validateUseTeamBalance(Team team, Long memberId, Account account, Long amount) {
+        TeamMembership membership =  teamMembershipRepository.findByMemberIdAndTeamId(memberId, team.getId())
+                .orElseThrow(() -> new TeamException(ErrorCode.NOT_TEAM_MEMBER));
+
+        if (membership.getStatus() != TeamMemberStatus.ACTIVE) {
+            throw new TeamException(ErrorCode.WITHDRAWN_MEMBER);
+        }
+
         if (account == null || !account.equals(team.getRepresentativeAccount())) {
             throw new AccountException(ErrorCode.INVALID_REPRESENTATIVE_ACCOUNT);
         }
