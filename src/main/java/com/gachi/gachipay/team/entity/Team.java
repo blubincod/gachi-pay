@@ -55,6 +55,9 @@ public class Team {
 
     // 팀 멤버십에 멤버 정보 추가
     public TeamMembership addMember(Member member) {
+        if (this.teamMemberships == null) {
+            this.teamMemberships = new ArrayList<>();
+        }
         TeamMembership teamMembership = new TeamMembership();
         teamMembership.setTeam(this);
         teamMembership.setMember(member);

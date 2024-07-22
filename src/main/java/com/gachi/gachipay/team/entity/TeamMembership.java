@@ -33,7 +33,9 @@ public class TeamMembership {
     @JoinColumn(name = "team_id")
     private Team team;
 
+    @Enumerated(EnumType.STRING)
     private TeamMemberRole role; // 역할(대표 회원, 일반 회원)
+    @Enumerated(EnumType.STRING)
     private TeamMemberStatus status; // 상태(활동 중, 탈퇴)
 
     @CreatedDate

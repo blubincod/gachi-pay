@@ -1,7 +1,7 @@
 # Member 테스트
 
 ### AccessToken
-@accessToken = eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJjbGllbnQxIiwiaWF0IjoxNzIxNjEyMTEwLCJleHAiOjE3MjE2MTkzMTB9.dIE9mnxj9-E5muTj_UagVBudSOjs-QYFivSPSc2kgjAML6VR7eEFaT2-oXYdAvdViPGNdCwoLPOWr07ysDIYYw
+@accessToken = eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJjbGllbnQxIiwiaWF0IjoxNzIxNjE4NjczLCJleHAiOjE3MjE2MjU4NzN9.mvkyrk6Uu8G5ehmRaNR0X5ZRCLdz6nqND93-TjWgg14-V_jqw9Qn9wDvdbHeYs0tF2X3WGNbPZUUTJ4UXlx4hQ
 
 ### get member accounts
 GET http://localhost:8080/api/v1/account?member_id=1

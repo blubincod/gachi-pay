@@ -8,6 +8,8 @@ import com.gachi.gachipay.common.exception.TeamException;
 import com.gachi.gachipay.member.entity.Member;
 import com.gachi.gachipay.member.repository.MemberRepository;
 import com.gachi.gachipay.team.entity.Team;
+import com.gachi.gachipay.team.entity.TeamMemberRole;
+import com.gachi.gachipay.team.entity.TeamMemberStatus;
 import com.gachi.gachipay.team.entity.TeamMembership;
 import com.gachi.gachipay.team.model.CreateTeam;
 import com.gachi.gachipay.team.model.TeamDto;
@@ -18,6 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -43,17 +46,16 @@ public class TeamService {
             CreateTeam.Request request
     ) {
         Member member = getMember(request.getMemberId());
-
+        Account account = getAccount(request.getAccountNumber());
         Team team = teamRepository.save(
                 Team.builder()
                         .representativeId(member.getId())
+                        .representativeAccount(account)
                         .teamName(request.getTeamName())
                         .description(request.getDescription())
                         .maxMembers(request.getMaxMembers())
                         .monthlyFee(request.getMonthlyFee())
                         .build());
-
-        Account account = getAccount(request.getAccountNumber());
 
         // 이미 그룹의 대표로 등록된 계좌인지 확인
         if (account.isRepresentativeAccount() || account.getTeam() != null) {
@@ -64,6 +66,12 @@ public class TeamService {
         account.setRepresentativeAccount(true);
         account.setTeam(team);
         accountRepository.save(account);
+
+        // 그룹 생성 시 Membership에 대표 회원으로 추가
+        TeamMembership membership = team.addMember(member);
+        membership.setRole(TeamMemberRole.REPRESENTATIVE);
+        membership.setStatus(TeamMemberStatus.ACTIVE);
+        teamMembershipRepository.save(membership);
 
         TeamDto teamDto = TeamDto.fromEntity(team);
 
@@ -126,7 +134,12 @@ public class TeamService {
 
         Team team = getTeam(teamId);
 
-        return teamMembershipRepository.save(team.addMember(member));
+        TeamMembership teamMembership = team.addMember(member);
+
+        teamMembership.setRole(TeamMemberRole.MEMBER);
+        teamMembership.setStatus(TeamMemberStatus.ACTIVE);
+
+        return teamMembershipRepository.save(teamMembership);
     }
 
 
@@ -140,9 +153,9 @@ public class TeamService {
 
         Team team = getTeam(teamId);
 
-        // 그룹에 해당 멤버가 있는지 확인
-        boolean isMember = teamMembershipRepository.existsByTeamAndMember(team, member);
-        if (!isMember) {
+        // 현재 그룹에 해당 멤버가 있는지 확인
+        TeamMembership teamMembership = teamMembershipRepository.findByTeamAndMember(team, member);
+        if (teamMembership == null) {
             throw new TeamException(ErrorCode.NOT_TEAM_MEMBER);
         }
 
@@ -151,7 +164,9 @@ public class TeamService {
             throw new TeamException(ErrorCode.REPRESENTATIVE_CANNOT_LEAVE);
         }
 
-        teamMembershipRepository.deleteByTeamIdAndMemberId(teamId, memberId);
+        teamMembership.setStatus(TeamMemberStatus.WITHDRAWN);
+        teamMembership.setLeftAt(LocalDateTime.now());
+        teamMembershipRepository.save(teamMembership);
     }
 
     /**
