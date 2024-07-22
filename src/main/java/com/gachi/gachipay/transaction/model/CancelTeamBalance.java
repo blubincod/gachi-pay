@@ -1,25 +1,26 @@
 package com.gachi.gachipay.transaction.model;
 
-import com.gachi.gachipay.common.aop.AccountLockIdInterface;
 import com.gachi.gachipay.transaction.entity.TransactionResultType;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.LocalDateTime;
 
 /**
- * 잔액 사용
+ * 그룹 잔액 사용 취소
  */
-public class UseBalance {
+public class CancelTeamBalance {
     @Getter
     @Setter
     @AllArgsConstructor
-    public static class Request implements AccountLockIdInterface {
+    public static class Request {
         @NotNull
+        private String transactionId;
+
+        private Long teamId;
+
         private Long memberId;
 
-        @NotBlank
         private String accountNumber;
 
         @NotNull
@@ -42,7 +43,8 @@ public class UseBalance {
 
         public static Response fromDto(TransactionDto transactionDto) {
             return Response.builder()
-                    .accountNumber(transactionDto.getAccountNumber())
+
+//                    .accountNumber(transactionDto.getAccountNumber())
                     .transactionId(transactionDto.getTransactionId())
                     .transactionResult(transactionDto.getTransactionResult())
                     .amount(transactionDto.getAmount())

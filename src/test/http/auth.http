@@ -28,5 +28,13 @@ Content-Type: application/json
   "phoneNumber" : "22346789"
 }
 
+### signup client3
+POST http://localhost:8080/auth/signup
+Content-Type: application/json
 
+{
+  "username" : "client3",
+  "password" : "123",
+  "phoneNumber" : "32346789"
+}
 

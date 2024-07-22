@@ -16,6 +16,8 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class TransactionDto {
     private String accountNumber; // 거래 계좌번호
+    private Long teamId; // 거래한 그룹 아이디
+    private Long memberId; // 거래한 사용자(멤버) 아아디
     private String transactionId; // 거래 고유 아이디
     private String transactionTitle; // 거래 제목
     private TransactionType transactionType; // 거래 유형(사용/취소)
@@ -30,6 +32,7 @@ public class TransactionDto {
 
     public static TransactionDto fromEntity(Transaction transaction) {
         return TransactionDto.builder()
+                .teamId(transaction.getTeam().getId())
                 .accountNumber(transaction.getAccount().getAccountNumber())
                 .transactionId(transaction.getTransactionId())
                 .transactionType(transaction.getTransactionType())

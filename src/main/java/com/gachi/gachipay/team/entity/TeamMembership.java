@@ -1,5 +1,6 @@
 package com.gachi.gachipay.team.entity;
 
+import com.gachi.gachipay.account.entity.Account;
 import com.gachi.gachipay.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -33,8 +34,14 @@ public class TeamMembership {
     @JoinColumn(name = "team_id")
     private Team team;
 
-    private String role; // 역할(대표 회원, 일반 회원)
-    private String status; // 상태(활동 중, 탈퇴)
+    @OneToOne()
+    @JoinColumn(name = "account_id")
+    private Account account; // 그룹에서 멤버들이 사용할 개인 계좌
+
+    @Enumerated(EnumType.STRING)
+    private TeamMemberRole role; // 역할(대표 회원, 일반 회원)
+    @Enumerated(EnumType.STRING)
+    private TeamMemberStatus status; // 상태(활동 중, 탈퇴)
 
     @CreatedDate
     private LocalDateTime joinedAt; // 가입 일자

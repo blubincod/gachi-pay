@@ -7,7 +7,7 @@ import lombok.Data;
 
 import java.time.LocalDate;
 
-public class CreateTeam {
+public class JoinTeam {
 
     @Data
     public static class Request {
@@ -16,22 +16,7 @@ public class CreateTeam {
 
         @NotBlank
         private String accountNumber;
-
-        @NotBlank
-        private String teamName;
-
-        @NotBlank
-        private String description;
-
-        @NotNull
-        private Long maxMembers;
-
-        @NotNull
-        private Long monthlyFee;
-
-        private LocalDate feeDueDate;
     }
-
     @Data
     @Builder
     public static class Response {
@@ -43,8 +28,8 @@ public class CreateTeam {
         private Long monthlyFee; // 월 회비
         private LocalDate feeDueDate; // 매달 돈 내는 날짜
 
-        public static CreateTeam.Response fromDto(TeamDto teamDto) {
-            return CreateTeam.Response.builder()
+        public static JoinTeam.Response fromDto(TeamDto teamDto) {
+            return JoinTeam.Response.builder()
                     .teamId(teamDto.getTeamId())
                     .representativeId(teamDto.getRepresentativeId())
                     .teamName(teamDto.getTeamName())

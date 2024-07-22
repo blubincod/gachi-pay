@@ -1,6 +1,8 @@
 package com.gachi.gachipay.team.controller;
 
+import com.gachi.gachipay.team.entity.TeamMembership;
 import com.gachi.gachipay.team.model.CreateTeam;
+import com.gachi.gachipay.team.model.JoinTeam;
 import com.gachi.gachipay.team.model.TeamDto;
 import com.gachi.gachipay.team.service.TeamService;
 import jakarta.validation.Valid;
@@ -8,7 +10,9 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 @Slf4j
@@ -22,12 +26,18 @@ public class TeamController {
      * 그룹 생성
      */
     @PostMapping
-    public ResponseEntity<?> createTeam(
+    public ResponseEntity<CreateTeam.Response> createTeam(
             @RequestBody @Valid CreateTeam.Request request
     ) {
-        teamService.createTeam(request);
+        CreateTeam.Response response = teamService.createTeam(request);
 
-        return ResponseEntity.ok("Created");
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(response.getTeamId())
+                .toUri();
+
+        return ResponseEntity.created(location).body(response);
     }
 
     /**
@@ -56,33 +66,37 @@ public class TeamController {
     /**
      * 그룹 삭제
      */
-    @DeleteMapping("/{teamId}")
+    @DeleteMapping("/{teamId}/member")
     public ResponseEntity<?> deleteTeam(
             @PathVariable Long teamId,
-            @RequestParam("member_id") Long memberId
+            @RequestParam("member_id") Long memberId,
+            @RequestParam("account_number") String accountNumber
     ) {
-        teamService.deleteTeam(teamId, memberId);
+        teamService.deleteTeam(teamId, memberId, accountNumber);
 
-        return ResponseEntity.ok("Deleted");
+        return ResponseEntity.noContent().build();
     }
 
     /**
      * 그룹 가입
      */
-    @PostMapping("/{teamId}/members")
-    public ResponseEntity<?> joinTeam(
+    @PostMapping("/{teamId}")
+    public ResponseEntity<TeamMembership> joinTeam(
             @PathVariable Long teamId,
-            @RequestParam("member_id") Long memberId
+            @RequestBody @Valid JoinTeam.Request request
     ) {
-        teamService.joinTeam(teamId, memberId);
+        TeamMembership teamMembership = teamService.joinTeam(
+                teamId,
+                request.getMemberId(),
+                request.getAccountNumber());
 
-        return ResponseEntity.ok("Joined");
+        return ResponseEntity.ok(teamMembership);
     }
 
     /**
      * 그룹 탈퇴
      */
-    @DeleteMapping("/{teamId}/members/{memberId}")
+    @DeleteMapping("/{teamId}/member/{memberId}")
     public ResponseEntity<?> withdrawTeam(
             @PathVariable Long teamId,
             @PathVariable Long memberId

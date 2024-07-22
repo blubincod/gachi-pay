@@ -19,14 +19,18 @@ public enum ErrorCode {
     TRANSACTION_NOT_FOUND("해당 거래가 없습니다."),
     AMOUNT_EXCEED_BALANCE("금액이 잔액을 초과했습니다."),
     ACCOUNT_TRANSACTION_LOCK("해당 계좌는 사용 중입니다."),
-    TRANSACTION_ACCOUNT_UN_MATCH("이 거래는 해당 계좌에서 발생한 거래가 아닙니다."),
+    TRANSACTION_ACCOUNT_MISMATCH("이 거래는 해당 계좌에서 발생한 거래가 아닙니다."),
     CANCEL_MUST_FULLY("부분 취소는 허용되지 않습니다."),
+    CANCEL_AMOUNT_MISMATCH("취소할 금액이 일치하지 않습니다."),
     TOO_OLD_ORDER_TO_CANCEL("6개월이 지난 거래는 취소가 불가능합니다."),
     // Team
     TEAM_NOT_FOUND("해당 그룹이 존재하지 않습니다."),
     NOT_TEAM_MEMBER("그룹의 멤버가 아닙니다."),
+    WITHDRAWN_MEMBER("탈퇴한 멤버입니다."),
+    REPRESENTATIVE_ACCOUNT_ALREADY_REGISTERED("이미 다른 그룹에 등록된 대표 계좌입니다, 다른 계좌를 이용해 주세요."),
     REPRESENTATIVE_CANNOT_LEAVE("대표자는 그룹을 탈퇴할 수 없습니다."),
     REPRESENTATIVE_ONLY_DELETE_TEAM("그룹 삭제 권한은 그룹 대표에게만 있습니다."),
+    INVALID_REPRESENTATIVE_ACCOUNT("유효하지 않은 대표 계좌입니다."),
     // Other
     INTERNAL_SERVER_ERROR("내부 서버 오류가 발생했습니다."),
     INVALID_REQUEST("잘못된 요청입니다.");

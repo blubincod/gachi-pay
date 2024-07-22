@@ -73,6 +73,6 @@ public class AccountController {
                 request.getMemberId(),
                 request.getAccountNumber());
 
-        return ResponseEntity.ok("deleted");
+        return ResponseEntity.noContent().build();
     }
 }

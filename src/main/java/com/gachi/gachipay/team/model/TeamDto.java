@@ -13,19 +13,17 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TeamDto {
+    private Long teamId;
     private String teamName; // 그룹 이름
-
     private String description; // 그룹 설명
-
     private Long representativeId; // 대표 회원 아이디
-
     private Long maxMembers; // 최대 인원
-
     private Long monthlyFee; // 월 회비
     private LocalDate feeDueDate; // 매달 돈 내는 날짜
 
     public static TeamDto fromEntity(Team team){
         return TeamDto.builder()
+                .teamId(team.getId())
                 .teamName(team.getTeamName())
                 .description(team.getDescription())
                 .representativeId(team.getRepresentativeId())

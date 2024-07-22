@@ -1,5 +1,6 @@
 package com.gachi.gachipay.team.entity;
 
+import com.gachi.gachipay.account.entity.Account;
 import com.gachi.gachipay.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.*;
@@ -17,7 +18,7 @@ import java.util.List;
 @Entity
 @Builder
 @Table(
-        uniqueConstraints = {
+        uniqueConstraints = { // 스케쥴러가 바라 볼 컬럼
                 @UniqueConstraint(
                         columnNames = {"id", "feeDueDate"}
                 )
@@ -36,6 +37,9 @@ public class Team {
 
     private Long representativeId; // 대표 멤버 아이디
 
+    @OneToOne
+    private Account representativeAccount; // 대표 계좌 정보
+
     private Long maxMembers; // 최대 인원
 
     private Long monthlyFee; // 월 회비
@@ -49,7 +53,11 @@ public class Team {
     @LastModifiedDate
     private LocalDateTime updatedAt;
 
+    // 팀 멤버십에 멤버 정보 추가
     public TeamMembership addMember(Member member) {
+        if (this.teamMemberships == null) {
+            this.teamMemberships = new ArrayList<>();
+        }
         TeamMembership teamMembership = new TeamMembership();
         teamMembership.setTeam(this);
         teamMembership.setMember(member);
